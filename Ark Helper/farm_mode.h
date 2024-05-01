@@ -5,7 +5,7 @@
 class FarmMode {
 public:
 
-    FarmMode();
+    FarmMode() = default;
 
     FarmMode(std::string file_with_setting);
 
@@ -13,7 +13,7 @@ public:
 
 private:
 
-    void ToggleResource(bool resource);
+    void ToggleResource(bool& resource);
 
     void ApplyOrInitializeSettingsFromFile();
 
@@ -33,7 +33,7 @@ private:
 
     void ClickToDrop();
 
-    HWND hWindowHandle_;
+    HWND h_window_handle_ = nullptr;
 
     int search_x_ = 0;
     int search_y_ = 0;
@@ -48,7 +48,7 @@ private:
     const std::string sand_ = "SAND";
     const std::string metal_ = "METAL";
 
-    std::string search_drop_button_file_path_ = "C:\\ArkHelper\\for_farm.txt";
+    std::string search_drop_button_file_path_ = "C:\\ArkHelper\\farm resources.txt";
 
     bool b_stone_ = true;
     bool b_berry_ = true;

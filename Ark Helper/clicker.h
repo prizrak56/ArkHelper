@@ -11,10 +11,6 @@ public:
 	
 	virtual void PressingKeyUntilHotKeyInsideApp(bool& is_enable) const {};
 
-	void SimulateKeyPress(WORD keyCode);
-
-	void SimulateCtrlV();
-
 	HWND GetWindowHandle() const;
 
 	void SetDelay(size_t delay);

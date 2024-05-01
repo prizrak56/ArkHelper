@@ -10,7 +10,7 @@ DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook
 
 void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::string& image_path){
 
-    HBITMAP hBitmap = CaptureScreenshotUPD(x, y, width, height);
+    HBITMAP hBitmap = CaptureScreenshotForWebhook(x, y, width, height);
     std::vector<BYTE> buf;
     IStream* stream = NULL;
     HRESULT hr = CreateStreamOnHGlobal(0, TRUE, &stream);

@@ -8,15 +8,9 @@
 #include "utils.h"
 #include "farm_mode.h"
 
-FarmMode::FarmMode() {
-    ApplyOrInitializeSettingsFromFile();
-}
+FarmMode::FarmMode(std::string file_with_setting) : search_drop_button_file_path_(file_with_setting){}
 
-FarmMode::FarmMode(std::string file_with_setting) : search_drop_button_file_path_(file_with_setting){
-    ApplyOrInitializeSettingsFromFile();
-}
-
-void FarmMode::ToggleResource(bool resource){
+void FarmMode::ToggleResource(bool& resource){
 
     if (resource == true) {
         resource = false;
@@ -31,9 +25,9 @@ void FarmMode::ToggleResource(bool resource){
 void FarmMode::ApplyOrInitializeSettingsFromFile(){
 
     const LPCWSTR Target_window_Name = L"ArkAscended";
-    hWindowHandle_ = FindWindow(NULL, Target_window_Name);
+    h_window_handle_ = FindWindow(NULL, Target_window_Name);
 
-    if (hWindowHandle_ == NULL) {
+    if (h_window_handle_ == NULL) {
         return;
     }
 
@@ -121,13 +115,13 @@ void FarmMode::GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2) {
 }
 
 void FarmMode::ClickToSearchInventory() {
-    PostMessage(hWindowHandle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(search_x_, search_y_));
-    PostMessage(hWindowHandle_, WM_LBUTTONUP, 0, MAKELPARAM(search_x_, search_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(search_x_, search_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(search_x_, search_y_));
 }
 
 void FarmMode::ClickToDrop() {
-    PostMessage(hWindowHandle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(drop_x_, drop_y_));
-    PostMessage(hWindowHandle_, WM_LBUTTONUP, 0, MAKELPARAM(drop_x_, drop_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(drop_x_, drop_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(drop_x_, drop_y_));
 }
 
 void FarmMode::Drop(std::string name) {
@@ -135,7 +129,7 @@ void FarmMode::Drop(std::string name) {
     ClickToSearchInventory();
     Sleep(100);
     for (auto& a : name) {
-        PostMessage(hWindowHandle_, WM_KEYDOWN, a, 0);
+        PostMessage(h_window_handle_, WM_KEYDOWN, a, 0);
         Sleep(20);
     }
     Sleep(400);
@@ -146,7 +140,7 @@ void FarmMode::Drop(std::string name) {
 void FarmMode::HandleInventory() {
     Sleep(400);
     std::cout << "Press F\n";
-    PostMessage(hWindowHandle_, WM_KEYDOWN, 'F', 0);
+    PostMessage(h_window_handle_, WM_KEYDOWN, 'F', 0);
     Sleep(1000);
 
     if (b_stone_ == true) {
@@ -182,7 +176,7 @@ void FarmMode::HandleInventory() {
         std::cout << "DropMetal()\n";
         Drop(metal_);
     }
-    PostMessage(hWindowHandle_, WM_KEYDOWN, VK_ESCAPE, 0);
+    PostMessage(h_window_handle_, WM_KEYDOWN, VK_ESCAPE, 0);
 }
 
 void FarmMode::EditCoordsPos() {
@@ -201,6 +195,8 @@ void FarmMode::EditCoordsPos() {
 }
 
 void FarmMode::FarmStart() {
+
+    ApplyOrInitializeSettingsFromFile();
 
     system("cls");
 
@@ -267,8 +263,8 @@ void FarmMode::FarmStart() {
 
         while (seconds > seconds_2) {
 
-            PostMessage(hWindowHandle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(0, 0));
-            PostMessage(hWindowHandle_, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
+            PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(0, 0));
+            PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
             if (mode_selection.first != Command::FARM_MODE || mode_selection.second != Command::START) {
                 break;
             }

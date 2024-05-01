@@ -9,4 +9,4 @@ void InfoMessage() noexcept;
 
 std::string ConvertLPCWSTRToString(LPCWSTR lpcwszStr) noexcept;
 
-void Text_to_codes(std::vector<WPARAM>& spam_words, std::string& spam_text);
+void TextToCodes(std::vector<WPARAM>& spam_words, std::string& spam_text);

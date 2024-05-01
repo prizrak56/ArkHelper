@@ -179,7 +179,7 @@ void ObServer() {
 		}
 		while (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::START) {
 			if (GetAsyncKeyState(VK_F2)) {
-				mode_selection.second == Command::NONE;
+				mode_selection.second = Command::NONE;
 				EnableDisableFunc(Command::NONE);
 			}
 			Sleep(100);

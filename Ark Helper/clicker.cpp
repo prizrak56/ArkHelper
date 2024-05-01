@@ -106,39 +106,3 @@ void SpaceButtonClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
 		Sleep(Clicker::GetDelay());
 	}
 }
-
-void Clicker::SimulateKeyPress(WORD keyCode){
-
-	INPUT input{};
-	input.type = INPUT_KEYBOARD;
-	input.ki.wScan = 0;
-	input.ki.time = 0;
-	input.ki.dwExtraInfo = 0;
-
-	input.ki.wVk = keyCode;
-	input.ki.dwFlags = 0;
-
-	SendInput(1, &input, sizeof(INPUT));
-
-	input.ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, &input, sizeof(INPUT));
-}
-
-void Clicker::SimulateCtrlV(){
-
-	Sleep(500);
-	SimulateKeyPress(0x0D);
-	Sleep(1000);
-
-	keybd_event(VK_CONTROL, 0, 0, 0);
-
-	keybd_event('V', 0, 0, 0);
-
-	keybd_event('V', 0, KEYEVENTF_KEYUP, 0);
-
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
-
-	Sleep(1000);
-	SimulateKeyPress(0x0D);
-	Sleep(1000);
-}

@@ -21,7 +21,7 @@ bool SplitIntoWordsAndFindWord(const std::string& text) noexcept
     if (!word.empty()) {
         words.push_back(word);
     }
-    for (auto a : words) {
+    for (const auto& a : words) {
         //Words kill and destroy, due to possible errors in recognition
         if (a == "destroyed!"s || a == "destroyed"s || a == "killed"s || a == "killed!"s || a == "destroyecy"s || a == "destrByed!"s || a == "killgu!"s || a == "killgu"s || a == "witHilled!"s || a == "witHilled"s || a == "killed?î"s || a == "kiiledt"s || a == "kinfer"s || a == "killedy"s || a == "killclr"s || a == "W@miiiiiin"s || a == "killedt"s) {
             return true;
@@ -69,7 +69,7 @@ std::string ConvertLPCWSTRToString(LPCWSTR lpcwszStr) noexcept{
 }
 
 // yes it's terrible
-void Text_to_codes(std::vector<WPARAM>& spam_words, std::string& spam_text){
+void TextToCodes(std::vector<WPARAM>& spam_words, std::string& spam_text){
 
     for (auto a : spam_text) {
         if (a == 97) {

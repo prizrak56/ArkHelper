@@ -19,6 +19,7 @@ enum class Command{
 	FARM_MODE,
 	SELECT_SETTINGS,
 	START,
+	SPAM_MODE,
 };
 
 enum class Resources {

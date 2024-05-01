@@ -25,7 +25,7 @@ std::string ReadImage(const std::string& image_path) noexcept {
     return result;
 }
 
-HBITMAP CaptureScreenshotUPD(int x, int y, int width, int height) noexcept {
+HBITMAP CaptureScreenshotForWebhook(int x, int y, int width, int height) noexcept {
     HDC hdcScreen = GetDC(NULL);
     HDC hdcCapture = CreateCompatibleDC(hdcScreen);
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
