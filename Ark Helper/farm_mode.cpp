@@ -8,7 +8,9 @@
 #include "utils.h"
 #include "farm_mode.h"
 
-FarmMode::FarmMode(std::string file_with_setting) : search_drop_button_file_path_(file_with_setting){}
+FarmMode::FarmMode(HWND h_window_handle) : h_window_handle_(h_window_handle){}
+
+FarmMode::FarmMode(std::string file_with_setting, HWND& h_window_handle) : search_drop_button_file_path_(file_with_setting),h_window_handle_(h_window_handle){}
 
 void FarmMode::ToggleResource(bool& resource){
 
@@ -24,10 +26,12 @@ void FarmMode::ToggleResource(bool& resource){
 
 void FarmMode::ApplyOrInitializeSettingsFromFile(){
 
-    const LPCWSTR Target_window_Name = L"ArkAscended";
-    h_window_handle_ = FindWindow(NULL, Target_window_Name);
-
     if (h_window_handle_ == NULL) {
+        system("cls");
+        InfoMessage();
+        std::cout << "Process not fpund" << std::endl;
+        mode_selection.second = Command::NONE;
+        EnableDisableFunc(Command::NONE);
         return;
     }
 

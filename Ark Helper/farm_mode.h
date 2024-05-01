@@ -5,9 +5,9 @@
 class FarmMode {
 public:
 
-    FarmMode() = default;
+    FarmMode(HWND h_window_handle);
 
-    FarmMode(std::string file_with_setting);
+    FarmMode(std::string file_with_setting, HWND& h_window_handle);
 
     void FarmStart();
 

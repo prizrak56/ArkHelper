@@ -25,7 +25,7 @@ int main() {
 
 	SpaceButtonClicker space_click(h_window_handle);
 
-	FarmMode farm;
+	FarmMode farm(h_window_handle);
 
 	InfoMessage();
 
