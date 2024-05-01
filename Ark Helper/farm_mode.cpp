@@ -29,7 +29,7 @@ void FarmMode::ApplyOrInitializeSettingsFromFile(){
     if (h_window_handle_ == NULL) {
         system("cls");
         InfoMessage();
-        std::cout << "Process not fpund" << std::endl;
+        std::cout << "Process not found" << std::endl;
         mode_selection.second = Command::NONE;
         EnableDisableFunc(Command::NONE);
         return;
