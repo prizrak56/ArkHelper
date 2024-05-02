@@ -1,11 +1,6 @@
 #pragma once
 #include <utility>
-
-void OpenYouTube() noexcept;
-
-void OpenGitHub() noexcept;
-
-void GetCursorPosition(bool& a_waiting_key_press, int& x, int& y) noexcept;
+#include <string>
 
 enum class Command{
 	NONE,
@@ -20,7 +15,7 @@ enum class Command{
 	SELECT_SETTINGS,
 	START,
 	SPAM_MODE,
-};
+}; // class Command
 
 enum class Resources {
 	NONE,
@@ -32,7 +27,7 @@ enum class Resources {
 	THATCH,
 	SAND,
 	METAL,
-};
+}; // class Resources
 
 enum class ScreenResolution {
 	NONE,
@@ -41,9 +36,18 @@ enum class ScreenResolution {
 	S_2048x1080,
 	S_3840x2160,
 	FULL_SCREEN,
+}; // class ScreenResolution
+
+enum class SpamCommand {
+	NONE,
+	EDIT,
+	START,
+}; // class SpamCommand
+
+struct Point {
+	int x = 0;
+	int y = 0;
 };
-
-
 
 inline std::pair<Command, Command> mode_selection = { Command::NONE, Command::NONE };
 
@@ -53,6 +57,18 @@ inline Resources resources = Resources::NONE;
 
 inline ScreenResolution screen_resolution = ScreenResolution::NONE;
 
+inline SpamCommand spam_command = SpamCommand::NONE;
+
+void OpenYouTube() noexcept;
+
+void OpenGitHub() noexcept;
+
+void GetCursorPosition(bool& a_waiting_key_press, int& x, int& y) noexcept;
+
 void EnableDisableFunc(Command com);
 
 void ObServer();
+
+bool FileExists(std::string& path);
+
+void ClearFile(std::string& path);

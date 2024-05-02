@@ -32,6 +32,6 @@ private:
 
 	void NoticeUser(int& everyone_time_counter, int& not_everyone_time_counter);
 
-	void SendDiscordMessageAndRestartTimerCustomScreenSolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone);
+	void SendDiscordMessageAndRestartTimerCustomPosScreenResolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone);
 
 }; // class LogMode

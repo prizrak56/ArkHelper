@@ -4,18 +4,17 @@
 #include <opencv2/opencv.hpp>
 #include <atlimage.h> // for CImage
 #include <fstream>
-//#include <curl/curl.h>
 
 DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook_path) {}
 
 void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::string& image_path){
 
-    HBITMAP hBitmap = CaptureScreenshotForWebhook(x, y, width, height);
+    HBITMAP h_bitmap = CaptureScreenshotForWebhook(x, y, width, height);
     std::vector<BYTE> buf;
     IStream* stream = NULL;
     HRESULT hr = CreateStreamOnHGlobal(0, TRUE, &stream);
     CImage image;
-    image.Attach(hBitmap);
+    image.Attach(h_bitmap);
     image.Save(stream, Gdiplus::ImageFormatPNG);
     ULARGE_INTEGER liSize;
     IStream_Size(stream, &liSize);
@@ -32,36 +31,33 @@ void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::st
     // Отправка изображения в Discord через вебхук
     // Send an image to Discord via webhook
     const std::string command = cmd_for_image_message_ + image_path + "\" " + GetWebHookUrl() + " > NUL";
-    //Gluing();
     system(command.c_str());
 
-    DeleteObject(hBitmap); // Освобождение ресурсов битмапа  || Freeing up bitmap resources
-
+    DeleteObject(h_bitmap); // Освобождение ресурсов битмапа  || Freeing up bitmap resources
 }
 
 int DiscordWebhook::system_no_output(std::string command) noexcept{
     command.insert(0, "/C ");
 
-    SHELLEXECUTEINFOA ShExecInfo = { 0 };
-    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-    ShExecInfo.hwnd = NULL;
-    ShExecInfo.lpVerb = NULL;
-    ShExecInfo.lpFile = "cmd.exe";
-    ShExecInfo.lpParameters = command.c_str();
-    ShExecInfo.lpDirectory = NULL;
-    ShExecInfo.nShow = SW_HIDE;
-    ShExecInfo.hInstApp = NULL;
+    SHELLEXECUTEINFOA sh_exec_info = { 0 };
+    sh_exec_info.cbSize = sizeof(SHELLEXECUTEINFO);
+    sh_exec_info.fMask = SEE_MASK_NOCLOSEPROCESS;
+    sh_exec_info.hwnd = NULL;
+    sh_exec_info.lpVerb = NULL;
+    sh_exec_info.lpFile = "cmd.exe";
+    sh_exec_info.lpParameters = command.c_str();
+    sh_exec_info.lpDirectory = NULL;
+    sh_exec_info.nShow = SW_HIDE;
+    sh_exec_info.hInstApp = NULL;
 
-    if (ShellExecuteExA(&ShExecInfo) == FALSE) {
+    if (ShellExecuteExA(&sh_exec_info) == FALSE) {
         return -1;
     }
-
-    if (ShExecInfo.hProcess != nullptr) {
-        WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+    if (sh_exec_info.hProcess != nullptr) {
+        WaitForSingleObject(sh_exec_info.hProcess, INFINITE);
         DWORD rv;
-        GetExitCodeProcess(ShExecInfo.hProcess, &rv);
-        CloseHandle(ShExecInfo.hProcess);
+        GetExitCodeProcess(sh_exec_info.hProcess, &rv);
+        CloseHandle(sh_exec_info.hProcess);
         return rv;
     }
     else {
@@ -78,9 +74,7 @@ std::string DiscordWebhook::GetWebHookUrl() const{
 }
 
 void DiscordWebhook::SendText(std::string message) {
-
     std::string command = cmd_1_for_text_message_ + message + cmd_2_for_text_message_ + GetWebHookUrl();
-
     system_no_output(command.c_str());
 }
 

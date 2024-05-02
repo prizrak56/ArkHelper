@@ -28,17 +28,18 @@ void FarmMode::ApplyOrInitializeSettingsFromFile(){
 
     if (h_window_handle_ == NULL) {
         system("cls");
-        InfoMessage();
+        MenuMessage();
         std::cout << "Process not found" << std::endl;
         mode_selection.second = Command::NONE;
         EnableDisableFunc(Command::NONE);
         return;
     }
+    Point tmp_search;
+    Point tmp_drop;
 
-    int s_x = 0, s_y = 0, d_x = 0, d_y = 0;
     std::ifstream file_name;
 
-    if (FileExists()) {
+    if (FileExists(search_drop_button_file_path_)) {
 
         file_name.open(search_drop_button_file_path_);
 
@@ -47,16 +48,16 @@ void FarmMode::ApplyOrInitializeSettingsFromFile(){
         while (std::getline(file_name, line)) {
 
             if (line_number == 0) {
-                s_x = std::stoi(line);
+                tmp_search.x = std::stoi(line);
             }
             else if (line_number == 1) {
-                s_y = std::stoi(line);
+                tmp_search.y = std::stoi(line);
             }
             else if (line_number == 2) {
-                d_x = std::stoi(line);
+                tmp_drop.x = std::stoi(line);
             }
             else if (line_number == 3) {
-                d_y = std::stoi(line);
+                tmp_drop.y = std::stoi(line);
             }
             ++line_number;
         }
@@ -65,32 +66,21 @@ void FarmMode::ApplyOrInitializeSettingsFromFile(){
     else {
         std::cout << "press F1 first on the search window for the right inventory,\n then press F1 on the button for throwing out all items in the right inventory\n";
 
-        GetSetCursorPosition(s_x, s_y, d_x, d_y);
+        GetSetCursorPosition(tmp_search.x, tmp_search.y, tmp_drop.x, tmp_drop.y);
 
         std::ofstream out;
         out.open(search_drop_button_file_path_);
-        out << s_x << "\n" << s_y << "\n" << d_x << "\n" << d_y;
+        out << tmp_search.x << "\n" << tmp_search.y << "\n" << tmp_drop.x << "\n" << tmp_drop.y;
         out.close();
     }
-    drop_x_ = d_x;
-    drop_y_ = d_y;
-    search_x_ = s_x;
-    search_y_ = s_y;
-}
-
-bool FarmMode::FileExists() {
-    std::ifstream file(search_drop_button_file_path_);
-    return file.good();
-}
-
-void FarmMode::ClearFile() const{
-    std::ofstream ofs;
-    ofs.open(search_drop_button_file_path_, std::ofstream::out | std::ofstream::trunc);
-    ofs.close();
+    drop_button_.x = tmp_drop.x;
+    drop_button_.y = tmp_drop.y;
+    search_button_.x = tmp_search.x;
+    search_button_.y = tmp_search.y;
 }
 
 void FarmMode::GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2) {
-    POINT* pCursorPos = new POINT;
+    POINT* p_cursor_pos = new POINT;
     int i = 0;
 
     std::cout << "F1 - Get cursor position\n";
@@ -99,14 +89,14 @@ void FarmMode::GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2) {
             ++i;
 
             Beep(200, 200);
-            if (GetCursorPos(pCursorPos)) {
+            if (GetCursorPos(p_cursor_pos)) {
                 if (i == 1) {
-                    x1 = pCursorPos->x;
-                    y1 = pCursorPos->y;
+                    x1 = p_cursor_pos->x;
+                    y1 = p_cursor_pos->y;
                 }
                 if (i == 2) {
-                    x2 = pCursorPos->x;
-                    y2 = pCursorPos->y;
+                    x2 = p_cursor_pos->x;
+                    y2 = p_cursor_pos->y;
                 }
                 std::cout << "success\n";
             }
@@ -119,13 +109,13 @@ void FarmMode::GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2) {
 }
 
 void FarmMode::ClickToSearchInventory() {
-    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(search_x_, search_y_));
-    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(search_x_, search_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(search_button_.x, search_button_.y));
+    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(search_button_.x, search_button_.y));
 }
 
 void FarmMode::ClickToDrop() {
-    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(drop_x_, drop_y_));
-    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(drop_x_, drop_y_));
+    PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(drop_button_.x, drop_button_.y));
+    PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(drop_button_.x, drop_button_.y));
 }
 
 void FarmMode::Drop(std::string name) {
@@ -185,25 +175,22 @@ void FarmMode::HandleInventory() {
 
 void FarmMode::EditCoordsPos() {
 
-    ClearFile();
+    ClearFile(search_drop_button_file_path_);
     system("cls");
 
     std::cout << "press F1 first on the search window for the right inventory,\n then press F1 on the button for throwing out all items in the right inventory\n";
 
-    GetSetCursorPosition(search_x_, search_y_, drop_x_, drop_y_);
+    GetSetCursorPosition(search_button_.x, search_button_.y, drop_button_.x, drop_button_.y);
 
     std::ofstream out;
     out.open(search_drop_button_file_path_);
-    out << search_x_ << "\n" << search_y_ << "\n" << drop_x_ << "\n" << drop_y_;
+    out << search_button_.x << "\n" << search_button_.y << "\n" << drop_button_.x << "\n" << drop_button_.y;
     out.close();
 }
 
 void FarmMode::FarmStart() {
 
     ApplyOrInitializeSettingsFromFile();
-
-    system("cls");
-
     mode_selection.second = Command::SELECT_SETTINGS;
 
     int seconds = 100;
@@ -213,7 +200,6 @@ void FarmMode::FarmStart() {
         system("cls");
 
         std::cout << "F1 - Start\n\n";
-
         std::cout << "Seconds: " << seconds << "\n";
         std::cout << "Throw away.\n";
         std::cout << std::boolalpha << "F2 - Flint " << b_flint_ << "\n";
@@ -266,7 +252,6 @@ void FarmMode::FarmStart() {
     while (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::START) {
 
         while (seconds > seconds_2) {
-
             PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(0, 0));
             PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
             if (mode_selection.first != Command::FARM_MODE || mode_selection.second != Command::START) {
@@ -274,11 +259,11 @@ void FarmMode::FarmStart() {
             }
             system("cls");
             std::cout << "F2 - disable\n";
-
             std::cout << seconds - seconds_2 << "\n";
             ++seconds_2;
             Sleep(100);
         }
+
         seconds_2 = 0;
         if (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::START) {
             std::cout << "Droping\n";
@@ -286,5 +271,5 @@ void FarmMode::FarmStart() {
         }
     }
     system("cls");
-    InfoMessage();
+    MenuMessage();
 }

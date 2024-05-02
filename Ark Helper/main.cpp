@@ -7,6 +7,7 @@
 #include "string_processing.h"
 #include "log_mode.h"
 #include "farm_mode.h"
+#include "server_spam.h"
 
 using namespace std::literals;
 
@@ -27,9 +28,13 @@ int main() {
 
 	FarmMode farm(h_window_handle);
 
-	InfoMessage();
+	MenuMessage();
 
 	LogMode log;
+
+	ServerSpam spam;
+
+	size_t delay = 0;
 
 	while (true) {
 		
@@ -37,7 +42,7 @@ int main() {
 		{
 		case Command::LEFT_CLICK:
 			if (h_window_handle != NULL) {
-				left_click.PressingKeyUntilHotKeyInsideApp(is_enable);
+				left_click.PressingKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else { 
 				EnableDisableFunc(Command::NONE);
@@ -46,7 +51,7 @@ int main() {
 			break;
 		case Command::RIGHT_CLICK:
 			if (h_window_handle != NULL) {
-				right_click.PressingKeyUntilHotKeyInsideApp(is_enable);
+				right_click.PressingKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else { 
 				EnableDisableFunc(Command::NONE);
@@ -55,7 +60,7 @@ int main() {
 			break;
 		case Command::SPACE_CLICK:
 			if (h_window_handle != NULL) {
-				space_click.PressingKeyUntilHotKeyInsideApp(is_enable);
+				space_click.PressingKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else {
 				EnableDisableFunc(Command::NONE);
@@ -63,39 +68,62 @@ int main() {
 			}
 			break;
 		case Command::OPEN_GIT:
+
 			OpenGitHub();
+
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
+
 			break;
+
 		case Command::OPEN_YT:
+
 			OpenYouTube();
+
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
+
 			break;
+
 		case Command::LOG_MODE:
+
 			log.ChooseOptions();
+
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
 			break;
+
 		case Command::FARM_MODE:
+
 			farm.FarmStart();
+
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
 			break;
+
 		case Command::DELAY:
-			size_t delay = 0;
+
 			system("CLS");
+
 			std::cout << "default - 200 ms" << std::endl;
 			std::cout << "Time delay milliseconds: " << std::endl;
 			std::cin >> delay;
 			std::cout << std::endl;
+
 			Beep(1000, 200);
-			InfoMessage();
+			MenuMessage();
+
 			left_click.SetDelay(delay);
 			right_click.SetDelay(delay);
 			space_click.SetDelay(delay);
+
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
+			break;
+
+		case Command::SPAM_MODE:
+			mode_selection.second = Command::SELECT_SETTINGS;
+			spam.SpamStart();
 			break;
 		}
 		Sleep(20);

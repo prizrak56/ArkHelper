@@ -52,7 +52,6 @@ void SpaceButtonClicker::Click() const {
 }
 
 void LeftMouseClicker::ClickInsideApplication() const{
-
 	RECT rect;
 	GetWindowRect(Clicker::GetWindowHandle(), &rect);
 	int x = (rect.left + rect.right) / 2;
@@ -77,8 +76,7 @@ void SpaceButtonClicker::ClickInsideApplication() const {
 	PostMessage(Clicker::GetWindowHandle(), WM_KEYUP, VK_SPACE, 0);
 }
 
-void LeftMouseClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
-
+void LeftMouseClicker::PressingKeyUntilHotKeyIsInputed(bool& is_enable) const{
 	Beep(1000, 800);
 	is_enable = true;
 	while (is_enable) {
@@ -87,8 +85,7 @@ void LeftMouseClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
 	}
 }
 
-void RightMouseClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
-
+void RightMouseClicker::PressingKeyUntilHotKeyIsInputed(bool& is_enable) const{
 	Beep(1500, 800);
 	is_enable = true;
 	while (is_enable) {
@@ -97,8 +94,7 @@ void RightMouseClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
 	}
 }
 
-void SpaceButtonClicker::PressingKeyUntilHotKeyInsideApp(bool& is_enable) const{
-
+void SpaceButtonClicker::PressingKeyUntilHotKeyIsInputed(bool& is_enable) const{
 	Beep(2000, 800);
 	is_enable = true;
 	while (is_enable) {

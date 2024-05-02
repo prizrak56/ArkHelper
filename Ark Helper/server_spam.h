@@ -5,14 +5,38 @@
 #include <windows.h>
 
 #include "clicker.h"
+#include "utils.h"
 
 class ServerSpam {
 public:
+
+	ServerSpam() = default;
+
+	ServerSpam(std::string file_settings_path);
+
+	ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
 
 	void SpamStart();
 
 private:
 	
+	struct SpamCoordsPosSetting {
+		Point press_to_start = { 930,860 };
+		Point search_server = { 1632,194 };
+		Point refresh_server = { 925,936 };
+		Point join_to_server = { 1707,940 };
+		Point join_to_server_mode = { 351,930 };
+		Point first_server = { 892,327 };
+		Point create_ppl = { 1647,962 };
+		Point server_not_found_back = { 175,877 };
+		Point server_not_found_back2 = { 955,961 };
+		Point exit_to_main_menu = { 953,628 };
+	};
+
+	void GetSetButtonPosition();
+
+	void GetSetCursorPosition(int& x, int& y);
+
 	void EnterText();
 
 	void SimulateKeyPress(WORD keyCode);
@@ -43,29 +67,25 @@ private:
 
 	void ApplyOrInitializeSettingsFromFile();
 
-	int server_number = 9068;
+	void CreateFileWithSettings();
 
-	LeftMouseClicker left_button;
+	int server_number_ = 0;
 
-	std::pair<int, int> press_to_start = { 930,860 };
-	std::pair<int, int> search_server = { 1632,194 };
-	std::pair<int, int> refresh_server = { 925,936 };
-	std::pair<int, int> join_to_server = { 1707,940 };
-	std::pair<int, int> join_to_server_mode = { 351,930 };
-	std::pair<int, int> first_server = { 892,327 };
-	std::pair<int, int> create_ppl = { 1647,962 };
-	std::pair<int, int> server_not_found_back = { 175,877 };
-	std::pair<int, int> server_not_found_back2 = { 955,961 };
-	std::pair<int, int> exit_to_main_menu = { 953,628 };
+	int last_server_number_ = 9200;
 
-	static std::vector<std::wstring> process_names;
+	LeftMouseClicker left_button_;
 
-	std::vector<std::string> process_names_s;
-	bool crash_on = false;
+	SpamCoordsPosSetting settings_;
 
-	std::vector<WPARAM> spam_words;   // not for spam || string to wparam < - spam text
-	std::vector<std::string> string_to_wparam_words;
-	const LPCWSTR name_of_the_game_for_crash_process_ = L"ArkAscended"; //  for search game in search menu windows
+	static std::vector<std::wstring> process_names_;
 
-};
+	bool crash_on_ = false;
+
+	std::string name_of_the_game_to_search_in_case_of_crash_ = "ARK SURVIVAL ASCENDED";
+
+	LPCWSTR name_of_the_game_for_crash_process_ = L"ArkAscended"; //  for search game in search menu windows
+
+	std::string file_setting_ = "C:\\ArkHelper\\server spam.txt";
+
+}; // class ServerSpam
 

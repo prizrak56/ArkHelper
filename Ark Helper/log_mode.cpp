@@ -95,10 +95,10 @@ void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_count
         bool is_kill_or_destroyed_detected = SplitIntoWordsAndFindWord(newStringProc);
 
         if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration) {
-            SendDiscordMessageAndRestartTimerCustomScreenSolution(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
+            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
         }
         else if (not_everyone_timer_duration >= not_everyone_time_counter) {
-            SendDiscordMessageAndRestartTimerCustomScreenSolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,is_kill_or_destroyed_detected);
+            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,is_kill_or_destroyed_detected);
         }
 
         while (mode_selection.second == Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {
@@ -117,7 +117,7 @@ void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_count
     }
 
     system("cls");
-    InfoMessage();
+    MenuMessage();
 }
 
 void LogMode::EditScreenSettings(int x, int y, int width, int height){
@@ -129,7 +129,7 @@ void LogMode::EditScreenSettings(int x, int y, int width, int height){
     mode_selection.second = Command::START;
 }
 
-void LogMode::SendDiscordMessageAndRestartTimerCustomScreenSolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone){
+void LogMode::SendDiscordMessageAndRestartTimerCustomPosScreenResolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone){
 
     if (is_everyone == true) {
         discord_webhook.SendText("@everyone");

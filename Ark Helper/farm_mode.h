@@ -17,10 +17,6 @@ private:
 
     void ApplyOrInitializeSettingsFromFile();
 
-    bool FileExists();
-
-    void ClearFile() const;
-
     void GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2);
 
     void Drop(std::string name);
@@ -35,10 +31,8 @@ private:
 
     HWND h_window_handle_ = nullptr;
 
-    int search_x_ = 0;
-    int search_y_ = 0;
-    int drop_x_ = 0;
-    int drop_y_ = 0;
+    Point search_button_;
+    Point drop_button_;
 
     const std::string stone_ = "STONE";
     const std::string berry_ = "BERRY";

@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "string_processing.h"
 #include <iostream>
+#include <fstream>
 
 void OpenYouTube() noexcept{
 	LPCWSTR url = L"https://www.youtube.com/channel/UCa4dY-BwibiLpV1JsdHfXDw";
@@ -39,7 +40,7 @@ void GetCursorPosition(bool& a_waiting_key_press, int& x, int& y) noexcept{
             Sleep(300);
             Beep(200, 250);
             system("cls");
-            InfoMessage();
+            MenuMessage();
         }
         Sleep(20);
     }
@@ -101,6 +102,11 @@ void ObServer() {
 			if (GetAsyncKeyState(VK_F8)) {
 				Beep(4000, 400);
 				EnableDisableFunc(Command::DELAY);
+				Sleep(500);
+			}
+			if (GetAsyncKeyState(VK_F9)) {
+				Beep(4500, 400);
+				EnableDisableFunc(Command::SPAM_MODE);
 				Sleep(500);
 			}
 			Sleep(100);
@@ -184,6 +190,39 @@ void ObServer() {
 			}
 			Sleep(100);
 		}
+
+		while (mode_selection.first == Command::SPAM_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
+			if (GetAsyncKeyState(VK_F1)) {
+				mode_selection.second = Command::START;
+			}
+			if (GetAsyncKeyState(VK_F2)) {
+				spam_command = SpamCommand::EDIT;
+			}
+			Sleep(100);
+		}
+		while (mode_selection.first == Command::SPAM_MODE && mode_selection.second == Command::START) {
+
+			if (GetAsyncKeyState(VK_F1)) {
+				spam_command = SpamCommand::START;
+			}
+
+			if (GetAsyncKeyState(VK_F2)) {
+				mode_selection.second = Command::NONE;
+				spam_command = SpamCommand::NONE;
+				EnableDisableFunc(Command::NONE);
+			}
+		}
 		Sleep(100);
 	}
+}
+
+bool FileExists(std::string& path) {
+	std::ifstream file(path);
+	return file.good();
+}
+
+void ClearFile(std::string& path) {
+	std::ofstream ofs;
+	ofs.open(path, std::ofstream::out | std::ofstream::trunc);
+	ofs.close();
 }

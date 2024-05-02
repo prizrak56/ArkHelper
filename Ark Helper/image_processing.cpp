@@ -26,34 +26,34 @@ std::string ReadImage(const std::string& image_path) noexcept {
 }
 
 HBITMAP CaptureScreenshotForWebhook(int x, int y, int width, int height) noexcept {
-    HDC hdcScreen = GetDC(NULL);
-    HDC hdcCapture = CreateCompatibleDC(hdcScreen);
-    HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
-    SelectObject(hdcCapture, hBitmap);
-    BitBlt(hdcCapture, 0, 0, width, height, hdcScreen, x, y, SRCCOPY);
-    ReleaseDC(NULL, hdcScreen);
-    DeleteDC(hdcCapture);
-    return hBitmap;
+    HDC hdc_screen = GetDC(NULL);
+    HDC hdc_capture = CreateCompatibleDC(hdc_screen);
+    HBITMAP h_bitmap = CreateCompatibleBitmap(hdc_screen, width, height);
+    SelectObject(hdc_capture, h_bitmap);
+    BitBlt(hdc_capture, 0, 0, width, height, hdc_screen, x, y, SRCCOPY);
+    ReleaseDC(NULL, hdc_screen);
+    DeleteDC(hdc_capture);
+    return h_bitmap;
 }
 
 void CaptureScreen(const char* save_path, int x, int y, int width, int height) noexcept {
     //RU Получаем хэндл главного окна экрана
     //EN We get the handle of the main screen window
-    HWND hDesktopWnd = GetDesktopWindow();
+    HWND h_desktop_wnd = GetDesktopWindow();
 
     // Получаем контекст устройства для экрана
     // Getting the device context for the screen
-    HDC hDesktopDC = GetDC(hDesktopWnd);
+    HDC h_desktop_dc = GetDC(h_desktop_wnd);
 
     // Создаем битмап для сохранения скриншота
     // Creating a bitmap to save a screenshot
-    HDC hCaptureDC = CreateCompatibleDC(hDesktopDC);
-    HBITMAP hCaptureBitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
-    SelectObject(hCaptureDC, hCaptureBitmap);
+    HDC h_capture_dc = CreateCompatibleDC(h_desktop_dc);
+    HBITMAP h_capture_bitmap = CreateCompatibleBitmap(h_desktop_dc, width, height);
+    SelectObject(h_capture_dc, h_capture_bitmap);
 
     // Копируем изображение экрана в битмап
     // Copying the screen image to a bitmap
-    BitBlt(hCaptureDC, 0, 0, width, height, hDesktopDC, x, y, SRCCOPY);
+    BitBlt(h_capture_dc, 0, 0, width, height, h_desktop_dc, x, y, SRCCOPY);
 
     // Сохраняем битмап в файл формата BMP (24 бита на пиксель)
     // Save the bitmap to a BMP file(24 bits per pixel)
@@ -75,9 +75,9 @@ void CaptureScreen(const char* save_path, int x, int y, int width, int height) n
     FILE* file;
     if (fopen_s(&file, save_path, "wb") != 0) {
         std::cerr << "Ошибка: Невозможно открыть файл для сохранения скриншота.\nError: The file to save the screenshot cannot be opened." << std::endl;
-        DeleteDC(hCaptureDC);
-        DeleteObject(hCaptureBitmap);
-        ReleaseDC(hDesktopWnd, hDesktopDC);
+        DeleteDC(h_capture_dc);
+        DeleteObject(h_capture_bitmap);
+        ReleaseDC(h_desktop_wnd, h_desktop_dc);
         return;
     }
 
@@ -96,14 +96,14 @@ void CaptureScreen(const char* save_path, int x, int y, int width, int height) n
     // Записываем данные пикселей изображения
     // Write image pixel data
     BYTE* pData = new BYTE[width * height * 3];  // изменено с 4 на 3 байта на пиксель  || changed from 4 to 3 bytes per pixel
-    GetDIBits(hCaptureDC, hCaptureBitmap, 0, height, pData, &bmi, DIB_RGB_COLORS);
+    GetDIBits(h_capture_dc, h_capture_bitmap, 0, height, pData, &bmi, DIB_RGB_COLORS);
     fwrite(pData, sizeof(BYTE), width * height * 3, file);  // изменено с 4 на 3 байта на пиксель  || changed from 4 to 3 bytes per pixel
 
     // Закрываем файл и освобождаем ресурсы
     // Close the file and release resources
     fclose(file);
     delete[] pData;
-    DeleteDC(hCaptureDC);
-    DeleteObject(hCaptureBitmap);
-    ReleaseDC(hDesktopWnd, hDesktopDC);
+    DeleteDC(h_capture_dc);
+    DeleteObject(h_capture_bitmap);
+    ReleaseDC(h_desktop_wnd, h_desktop_dc);
 }

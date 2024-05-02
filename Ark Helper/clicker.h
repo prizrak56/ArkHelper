@@ -5,11 +5,12 @@ class Clicker {
 public:
 
 	Clicker() = default;
+
 	Clicker(HWND h_windows_handle);
 
 	virtual void Click() const {};
 	
-	virtual void PressingKeyUntilHotKeyInsideApp(bool& is_enable) const {};
+	virtual void PressingKeyUntilHotKeyIsInputed(bool& is_enable) const {};
 
 	HWND GetWindowHandle() const;
 
@@ -20,6 +21,7 @@ public:
 private:
 
 	size_t delay_ = 200;
+
 	HWND h_windows_handle_ = nullptr;
 
 	virtual void ClickInsideApplication() const {}
@@ -35,11 +37,12 @@ public:
 
 	void Click() const override;
 
-	void PressingKeyUntilHotKeyInsideApp(bool& is_enable) const override;
+	void PressingKeyUntilHotKeyIsInputed(bool& is_enable) const override;
 
 private:
 
 	void ClickInsideApplication() const override;
+
 }; //class LeftMouseClicker
 
 class RightMouseClicker : public Clicker {
@@ -51,7 +54,7 @@ public:
 
 	void Click() const override;
 
-	void PressingKeyUntilHotKeyInsideApp(bool& is_enable) const override;
+	void PressingKeyUntilHotKeyIsInputed(bool& is_enable) const override;
 
 private:
 
@@ -61,13 +64,14 @@ private:
 
 class SpaceButtonClicker : public Clicker {
 public:
+
 	SpaceButtonClicker() = default;
 
 	SpaceButtonClicker(HWND h_windows_handle);
 
 	void Click() const override;
 
-	void PressingKeyUntilHotKeyInsideApp(bool& is_enable) const override;
+	void PressingKeyUntilHotKeyIsInputed(bool& is_enable) const override;
 
 private:
 
