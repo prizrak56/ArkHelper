@@ -8,6 +8,7 @@
 #include "log_mode.h"
 #include "farm_mode.h"
 #include "server_spam.h"
+#include "drop_mode.h"
 
 using namespace std::literals;
 
@@ -28,13 +29,15 @@ int main() {
 
 	FarmMode farm(h_window_handle);
 
-	MenuMessage();
-
 	LogMode log;
 
 	ServerSpam spam;
 
+	DropMode looting_drop;
+
 	size_t delay = 0;
+
+	MenuMessage();
 
 	while (true) {
 		
@@ -125,7 +128,13 @@ int main() {
 			mode_selection.second = Command::SELECT_SETTINGS;
 			spam.SpamStart();
 			break;
+		case Command::DROP_MODE:
+			mode_selection.second = Command::SELECT_SETTINGS;
+			looting_drop.SupplyCreate();
+			mode_selection.first = Command::NONE;
+			mode_selection.second = Command::NONE;
 		}
+		
 		Sleep(20);
 	}
 }

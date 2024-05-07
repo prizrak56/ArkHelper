@@ -43,6 +43,7 @@ void MenuMessage() noexcept{
     std::cout << "F8 - Set delay"s << std::endl;
     std::cout << "F9 - Spam mode"s << std::endl;
 
+    std::cout << "\nNext page right click + F2" << std::endl;
 
     std::cout << "\ndiscord: prizrak_p\n"s << std::endl;
     std::cout << "GitHub https://github.com/prizrak56\n\n"s << std::endl;
@@ -56,6 +57,27 @@ void MenuMessage() noexcept{
     std::cout << "                                                        |_____|        \n"s;
 
 }
+
+void MenuMessage2() noexcept{
+
+    system("CLS");
+    std::cout << "F1 - Drop mode"s << std::endl;
+
+    std::cout << "\nPrevious page right click + F1" << std::endl;
+
+
+    std::cout << "\ndiscord: prizrak_p\n"s << std::endl;
+    std::cout << "GitHub https://github.com/prizrak56\n\n"s << std::endl;
+
+    std::cout << " \n";
+    std::cout << "   ____    ____    ___   _____  ____       _      _  __          ____  \n"s;
+    std::cout << "  |  _ \\  |  _ \\  |_ _| |__  / |  _ \\     / \\    | |/ /         |  _ \\ \n"s;
+    std::cout << "  | |_) | | |_) |  | |    / /  | |_) |   / _ \\   | ' /          | |_) |\n"s;
+    std::cout << "  |  __/  |  _ <   | |   / /_  |  _ <   / ___ \\  | . \\          |  __/ \n"s;
+    std::cout << "  |_|     |_| \\_\\ |___| /____| |_| \\_\\ /_/   \\_\\ |_|\\_\\  _____  |_|    \n"s;
+    std::cout << "                                                        |_____|        \n"s;
+}
+
 
 std::string ConvertLPCWSTRToString(LPCWSTR lpcwsz_str) noexcept{
     

@@ -13,22 +13,6 @@ ServerSpam::ServerSpam(std::string file_settings_path) : file_setting_(file_sett
 ServerSpam::ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run) :
     file_setting_(file_settings_path), name_of_the_game_for_crash_process_(lp_process_name), name_of_the_game_to_search_in_case_of_crash_(name_of_the_process_to_run){}
 
-void ServerSpam::SimulateKeyPress(WORD keyCode) {
-
-    INPUT input{};
-
-    input.type = INPUT_KEYBOARD;
-    input.ki.wScan = 0;
-    input.ki.time = 0;
-    input.ki.dwExtraInfo = 0;
-    input.ki.wVk = keyCode;
-    input.ki.dwFlags = 0;
-
-    SendInput(1, &input, sizeof(INPUT));
-    input.ki.dwFlags = KEYEVENTF_KEYUP;
-    SendInput(1, &input, sizeof(INPUT));
-}
-
 void ServerSpam::SimulateCtrlV() {
     Sleep(500);
     SimulateKeyPress(0x0D);
@@ -361,7 +345,6 @@ void ServerSpam::SpamStart() {
 
     system("cls");
 
-    setlocale(LC_ALL, "ru");
     AllocConsole();
 
     std::cout << "Press F1 - to start" << std::endl;

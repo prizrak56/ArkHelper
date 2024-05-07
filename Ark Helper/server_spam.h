@@ -39,8 +39,6 @@ private:
 
 	void EnterText();
 
-	void SimulateKeyPress(WORD keyCode);
-
 	void SimulateCtrlV();
 
 	void PressToStart();
