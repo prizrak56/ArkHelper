@@ -16,7 +16,7 @@
     .
     <a href="https://github.com/prizrak56/ArkHelper/issues">Request Feature</a>
     .
-    <a href="https://www.youtube.com/watch?v=RKjCYzHtpZQ&t=48s">Youtube review</a>
+    <a href="https://www.youtube.com/watch?v=RKjCYzHtpZQ&t=0s">Youtube review</a>
   </p>
 </p>
 
