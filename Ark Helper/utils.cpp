@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <filesystem>
+
+using namespace std::literals;
 
 void OpenYouTube() noexcept{
 	LPCWSTR url = L"https://www.youtube.com/channel/UCa4dY-BwibiLpV1JsdHfXDw";
@@ -20,17 +23,17 @@ void GetCursorPosition(bool& a_waiting_key_press, int& x, int& y) noexcept{
     a_waiting_key_press = true;
 
     system("cls");
-    std::cout << "F1 - Get cursor position\nF2 - Disable\n";
+    std::cout << "F1 - Get cursor position\nF2 - Disable\n"s;
     while (a_waiting_key_press) {
         if (GetAsyncKeyState(VK_F1)) {
             Beep(200, 200);
             if (GetCursorPos(pCursorPos)) {
                 x = pCursorPos->x;
                 y = pCursorPos->y;
-                std::cout << "X: " << x << ", Y: " << y << std::endl;
+                std::cout << "X: "s << x << ", Y: "s << y << std::endl;
             }
             else {
-                std::cout << "Failed to get cursor position" << std::endl;
+                std::cout << "Failed to get cursor position"s << std::endl;
             }
             Sleep(50);
         }
@@ -102,7 +105,7 @@ void ObServer() {
 void ObServerDropModeSelectSettings(){
 	while (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
 		if (GetAsyncKeyState(VK_F1)) {
-			mode_selection.first = Command::DROP_MODE;
+			EnableDisableFunc(Command::DROP_MODE);
 			mode_selection.second = Command::START;
 		}
 		if (GetAsyncKeyState(VK_F2)) {
@@ -194,7 +197,6 @@ void ObServerFarmModeSelectSettings(){
 		}
 		Sleep(100);
 	}
-
 }
 
 void ObServerFarmModeStart(){
@@ -288,7 +290,6 @@ void ObServerSelectingModeFromTheFirstPage(){
 		}
 		Sleep(100);
 	}
-
 }
 
 void ObServerSelectingModeFromTheSecondPage(){
@@ -302,12 +303,41 @@ void ObServerSelectingModeFromTheSecondPage(){
 		}
 		if (!GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F1)) {
 			EnableDisableFunc(Command::DROP_MODE);
-			mode_selection.first = Command::DROP_MODE;
 			mode_selection.second = Command::SELECT_SETTINGS;
 			ObServerDropModeSelectSettings();
 		}
 		if (!GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F2)) {
+			EnableDisableFunc(Command::EDIT_SPAM_MOD);
+		}
+		if (GetAsyncKeyState(VK_F3)) {
+			EnableDisableFunc(Command::EDIT_DROP_MODE);
+			ObServerEditDropModeSettings();
+		}
+		if (GetAsyncKeyState(VK_F4)) {
+			EnableDisableFunc(Command::EDIT_WEBHOOK);
+			while (mode_selection.first == Command::EDIT_WEBHOOK) {
+				//sleep (stub)
+			}
+		}
+		if (GetAsyncKeyState(VK_F5)) {
+			EnableDisableFunc(Command::EDIT_FARM_COORD);
+			while (mode_selection.first == Command::EDIT_FARM_COORD) {
+				//sleep (stub)
+			}
+		}
+		Sleep(100);
+	}
+}
 
+void ObServerEditDropModeSettings() {
+	while (mode_selection.first == Command::EDIT_DROP_MODE) {
+		if (GetAsyncKeyState(VK_F1)) {
+			mode_selection.second = Command::EDIT_DROP_COORD;
+			Sleep(200);
+		}
+		if (GetAsyncKeyState(VK_F2)) {
+			mode_selection.second = Command::EDIT_DROP_NAME;
+			Sleep(200);
 		}
 		Sleep(100);
 	}
@@ -339,3 +369,128 @@ void SimulateKeyPress(WORD keyCode) {
 	input.ki.dwFlags = KEYEVENTF_KEYUP;
 	SendInput(1, &input, sizeof(INPUT));
 }
+
+void CheckFileSettings(std::string& path) {
+	if (FileExists(path)) {
+		return;
+	}
+	auto pos = path.find_last_of('\\');
+
+	if (pos == std::string::npos) {
+		return;
+	}
+
+	std::string directory = path.substr(0, pos);
+	if (!FileExists(directory)) {
+		std::filesystem::create_directory(directory);
+	}
+
+	std::ofstream out;
+	out.open(path);
+	if (!out.is_open()) {
+		std::cout << "settings file was not created or opened"s << std::endl;
+		return;
+	}
+	{
+		out << "webhook"s << std::endl;
+		out << "https://discord.com/api/webhooks/exemple/exemple"s << std::endl << std::endl;
+	}
+
+	{
+		out << "ServerSpam"s << std::endl;
+
+		out << "pess_to_start: 0, 0"s << std::endl;
+		out << "search_server: 0, 0"s << std::endl;
+		out << "refresh_server: 0, 0"s << std::endl;
+		out << "join_to_server: 0, 0"s << std::endl;
+		out << "join_to_server_mode: 0, 0"s << std::endl;
+		out << "first_server: 0, 0"s << std::endl;
+		out << "create_people: 0, 0"s << std::endl;
+		out << "server_not_found_back: 0, 0"s << std::endl;
+		out << "server_not_found_back2: 0, 0"s << std::endl;
+		out << "exit_to_main_menu: 0, 0"s << std::endl << std::endl;
+	}
+
+	{
+		out << "DropMode"s << std::endl;
+
+		out << "search_window: 0, 0"s << std::endl;
+		out << "first_tp_name_in_list: 0, 0"s << std::endl;
+		out << "teleporting: 0, 0"s << std::endl;
+		out << "take_all: 0, 0"s << std::endl;
+		out << "give_all: 0, 0"s << std::endl;
+		out << "close_inventory: 0, 0"s << std::endl;
+		out << "names" << std::endl;
+		out << "name of teleports: DROP1, DROP2, DROP3, DROPN"s << std::endl;
+		out << "name of teleport for saving loot: SAVELOOT"s << std::endl << std::endl;
+	}
+
+	{
+		out << "FarmMode"s << std::endl;
+
+		out << "drop_all: 0, 0"s << std::endl;
+		out << "search_window: 0, 0"s << std::endl << std::endl;
+	}
+	out.close();
+}
+
+void GetSetCursorPosition(int& x, int& y) {
+
+	POINT* p_cursor_pos = new POINT;
+	bool button_pressed = false;
+
+	std::cout << "F1 - Get cursor position"s << std::endl;
+	while (button_pressed == false) {
+
+		if (GetAsyncKeyState(VK_F1)) {
+			Beep(200, 200);
+			if (GetCursorPos(p_cursor_pos)) {
+				x = p_cursor_pos->x;
+				y = p_cursor_pos->y;
+				std::cout << "success"s << std::endl;
+			}
+			else {
+				std::cout << "Failed to get cursor position"s << std::endl;
+			}
+			button_pressed = true;
+			Sleep(300);
+		}
+	}
+	delete p_cursor_pos;
+}
+
+void EditWebhook(std::string& path) {
+
+	std::string webhook;
+	std::cout << "Enter webhook: "s;
+	std::getline(std::cin, webhook);
+
+	std::ifstream input;
+	input.open(path);
+	if (!input.is_open()) {
+		std::cout << "Couldn't open the file: "s << path << std::endl;
+		return;
+	}
+	
+	std::vector<std::string> lines;
+	std::string line;
+	while (std::getline(input, line)) {
+		lines.push_back(line);
+	}
+	input.close();
+	lines[1] = webhook;
+
+	std::ofstream out;
+	out.open(path);
+	if (!out.is_open()) {
+		std::cout << "Couldn't open the file: "s << path << std::endl;
+		return;
+	}
+
+	for (const auto& a : lines) {
+		out << a << std::endl;
+	}
+	out.close();
+	std::cout << "OK"s << std::endl;
+}
+

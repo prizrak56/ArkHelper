@@ -43,7 +43,8 @@ void MenuMessage() noexcept{
     std::cout << "F8 - Set delay"s << std::endl;
     std::cout << "F9 - Spam mode"s << std::endl;
 
-    std::cout << "\nNext page right click + F2" << std::endl;
+    std::cout << "\nNext page right click + F2"s << std::endl;
+    std::cout << "Changing modes settings is on the second page"s << std::endl;
 
     std::cout << "\ndiscord: prizrak_p\n"s << std::endl;
     std::cout << "GitHub https://github.com/prizrak56\n\n"s << std::endl;
@@ -62,8 +63,13 @@ void MenuMessage2() noexcept{
 
     system("CLS");
     std::cout << "F1 - Drop mode"s << std::endl;
+    std::cout << "F2 - Edit SpamMode settings"s << std::endl;
+    std::cout << "F3 - Edit DropMode settings"s << std::endl;
+    std::cout << "F4 - Edit Webhook"s << std::endl;
+    std::cout << "F5 - Edit FarmCoord"s << std::endl;
 
-    std::cout << "\nPrevious page right click + F1" << std::endl;
+
+    std::cout << "\nPrevious page right click + F1"s << std::endl;
 
 
     std::cout << "\ndiscord: prizrak_p\n"s << std::endl;
@@ -88,4 +94,32 @@ std::string ConvertLPCWSTRToString(LPCWSTR lpcwsz_str) noexcept{
     WideCharToMultiByte(CP_UTF8, 0, lpcwsz_str, -1, &str[0],str_length, nullptr, nullptr);
 
     return str;
+}
+
+std::pair<int, int> ParseCoords(std::string& str) {
+
+    int x = 0;
+    int y = 0;
+    auto pos = str.find_first_of(':');
+    str = str.substr(pos + 1, str.length());
+
+    pos = str.find_first_of(',');
+
+    x = std::stoi(str.substr(0, pos));
+    y = std::stoi(str.substr(pos + 1, str.length()));
+    return std::make_pair(x,y);
+}
+
+std::vector<std::string> ParseName(std::string& str) {
+    std::vector<std::string> result;
+    auto pos = str.find_first_of(':');
+    str = str.substr(pos + 2, str.length());
+    pos = str.find_first_of(',');
+    while (pos != std::string::npos) {
+        result.push_back(str.substr(0, pos));
+        str = str.substr(pos + 2, str.length());
+        pos = str.find_first_of(',');
+    }
+    result.push_back(str);
+    return result;
 }

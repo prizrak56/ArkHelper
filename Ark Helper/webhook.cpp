@@ -5,6 +5,31 @@
 #include <atlimage.h> // for CImage
 #include <fstream>
 
+using namespace std::literals;
+
+DiscordWebhook::DiscordWebhook() {
+
+    std::ifstream input;
+    input.open(webhook_path_);
+    if (!input.is_open()) {
+        std::cout << webhook_path_ << " file was not created or opened"s << std::endl;
+        return;
+    }
+    
+    std::string line;
+    std::size_t counter = 0;
+    while (std::getline(input, line)) {
+        
+        if (counter == 1) {
+            webhook_path_ = line;
+            input.close();
+            return;
+        }
+        ++counter;
+    }
+    input.close();
+}
+
 DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook_path) {}
 
 void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::string& image_path){
@@ -66,11 +91,7 @@ int DiscordWebhook::system_no_output(std::string command) noexcept{
 }
 
 std::string DiscordWebhook::GetWebHookUrl() const{
-    std::ifstream webhook_url;
-    webhook_url.open(webhook_path_);
-    std::string result;
-    std::getline(webhook_url, result);
-    return result;
+    return webhook_path_;
 }
 
 void DiscordWebhook::SendText(std::string message) {

@@ -11,19 +11,17 @@ public:
 
     void FarmStart();
 
+    void EditCoords();
+
 private:
 
     void ToggleResource(bool& resource);
 
     void ApplyOrInitializeSettingsFromFile();
 
-    void GetSetCursorPosition(int& x1, int& y1, int& x2, int& y2);
-
     void Drop(std::string name);
 
     void HandleInventory();
-
-    void EditCoordsPos();
 
     void ClickToSearchInventory();
 
@@ -42,7 +40,7 @@ private:
     const std::string sand_ = "SAND";
     const std::string metal_ = "METAL";
 
-    std::string search_drop_button_file_path_ = "C:\\ArkHelper\\farm resources.txt";
+    std::string search_drop_button_file_path_ = "C:\\ArkHelper\\settings.txt";
 
     bool b_stone_ = true;
     bool b_berry_ = true;

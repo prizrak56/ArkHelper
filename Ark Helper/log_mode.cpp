@@ -6,7 +6,9 @@
 #include "utils.h"
 #include "image_processing.h"
 
-LogMode::LogMode(std::string& image_save_path) : image_save_path_(image_save_path) {}
+using namespace std::literals;
+
+LogMode::LogMode(std::string& image_save_path) : image_save_path_(image_save_path + "\\log.png") {}
 
 void LogMode::ChooseOptions() {
     system("CLS");
@@ -17,9 +19,9 @@ void LogMode::ChooseOptions() {
     // the permanentScreenshot variable was not named entirely correctly; it is responsible for sending messages to discord if keywords were not found
     int not_everyone_time_counter = 0;
 
-    std::cout << "enter @everyone time delay(minutes): ";
+    std::cout << "enter @everyone time delay(minutes): "s;
     std::cin >> everyone_time_counter;
-    std::cout << "indicate the time of sending any screenshot (minutes): ";
+    std::cout << "indicate the time of sending any screenshot (minutes): "s;
     std::cin >> not_everyone_time_counter;
     system("cls");
 
@@ -29,7 +31,7 @@ void LogMode::ChooseOptions() {
     int width = 0;
     int height = 0;
 
-    std::cout << "F1 - Start 1920x1080\n" << "F2 - Start 2048x1080\nF3 - Start 2048x1080(not tested)\nF4 = Start 3840x2160(not tested)\nF5 - Start FullScreen(There may be false positives)\n";
+    std::cout << "F1 - Start 1920x1080\n" << "F2 - Start 2048x1080\nF3 - Start 2048x1080(not tested)\nF4 = Start 3840x2160(not tested)\nF5 - Start FullScreen(There may be false positives)\n"s;
 
     mode_selection.second = Command::SELECT_SETTINGS;
 

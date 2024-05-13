@@ -4,7 +4,7 @@
 class DiscordWebhook {
 public:
 
-	DiscordWebhook() = default;
+	DiscordWebhook();
 	DiscordWebhook(std::string webhook_url);
 	
 	void SendImage(int x, int y, int width, int height, const std::string& image_path);
@@ -23,5 +23,5 @@ private:
 
 	const std::string cmd_for_image_message_ = "curl -F \"file1=@";
 
-	std::string webhook_path_ = "C:\\ArkHelper\\webhook.txt";
+	std::string webhook_path_ = "C:\\ArkHelper\\settings.txt";
 }; //class DiscordWebhook 

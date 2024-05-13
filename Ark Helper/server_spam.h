@@ -8,18 +8,8 @@
 #include "utils.h"
 
 class ServerSpam {
-public:
-
-	ServerSpam() = default;
-
-	ServerSpam(std::string file_settings_path);
-
-	ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
-
-	void SpamStart();
-
 private:
-	
+
 	struct SpamCoordsPosSetting {
 		Point press_to_start = { 930,860 };
 		Point search_server = { 1632,194 };
@@ -33,9 +23,7 @@ private:
 		Point exit_to_main_menu = { 953,628 };
 	};
 
-	void GetSetButtonPosition();
-
-	void GetSetCursorPosition(int& x, int& y);
+	//void GetSetCursorPosition(int& x, int& y);
 
 	void EnterText();
 
@@ -65,8 +53,22 @@ private:
 
 	void ApplyOrInitializeSettingsFromFile();
 
-	void CreateFileWithSettings();
+	void SetSettings();
 
+public:
+
+	void GetSetButtonPosition();
+
+	ServerSpam() = default;
+
+	ServerSpam(std::string file_settings_path);
+
+	ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
+
+	void SpamStart();
+
+private:
+	
 	int server_number_ = 0;
 
 	int last_server_number_ = 9200;
@@ -83,7 +85,7 @@ private:
 
 	LPCWSTR name_of_the_game_for_crash_process_ = L"ArkAscended"; //  for search game in search menu windows
 
-	std::string file_setting_ = "C:\\ArkHelper\\server spam.txt";
+	std::string file_setting_ = "C:\\ArkHelper\\settings.txt";
 
 }; // class ServerSpam
 

@@ -6,94 +6,98 @@
 #include <sstream>
 #include <cstdio>
 
+using namespace std::literals;
+
+DropMode::DropMode(std::string& settings_path) : path_settings_(settings_path) {}
+
 void DropMode::MouseDown() {
-    std::cout << "Mouse down start\n";
+    std::cout << "Mouse down start"s << std::endl;
     for (int i = 0; i < 100; i++) {
         mouse_event(MOUSEEVENTF_MOVE, 0, 10, 0, 0);  //full down
     }
-    std::cout << "Mouse down end\n";
+    std::cout << "Mouse down end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::OpenTp() {
-    std::cout << "Open teleport start\n";
+    std::cout << "Open teleport start"s << std::endl;
     SimulateKeyPress('E');
-    std::cout << "Open teleport end\n";
+    std::cout << "Open teleport end"s << std::endl;
     Sleep(1000);
 }
 
 void DropMode::SearchClick(Point search_window) {
-    std::cout << "Search click start\n";
+    std::cout << "Search click start" << std::endl;
     SetCursorPos(search_window.x, search_window.y);
     Sleep(500);
     left_button_.Click();
-    std::cout << "Search click end\n";
+    std::cout << "Search click end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::EnterTpName(std::string& teleport_name) {
 
-    std::cout << "Enter tp name start\n";
+    std::cout << "Enter tp name start"s << std::endl;
     for (auto a : teleport_name) {
         SimulateKeyPress(a);   //enter tp_name
         Sleep(50);
     }
-    std::cout << "Enter tp name end\n";
+    std::cout << "Enter tp name end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::ClickToTpName(Point tp_name_s) {
-    std::cout << "Click to tp name start\n";
+    std::cout << "Click to tp name start"s << std::endl;
     Sleep(500);
     SetCursorPos(tp_name_s.x, tp_name_s.y);
     Sleep(500);
     left_button_.Click();
-    std::cout << "Click to tp name end\n";
+    std::cout << "Click to tp name end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::ClickToTeleporting(Point teleporting) {
-    std::cout << "teleporting start\n";
+    std::cout << "teleporting start" << std::endl;
     SetCursorPos(teleporting.x, teleporting.y); //teleport
     Sleep(500);
     left_button_.Click();
-    std::cout << "teleporting end\n";
+    std::cout << "teleporting end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::MouseUp() {
 
-    std::cout << "Mouse up start\n";
+    std::cout << "Mouse up start"s << std::endl;
     for (int i = 0; i < 67; i++) {
         mouse_event(MOUSEEVENTF_MOVE, 0, -10, 0, 0);
     }
-    std::cout << "Mouse up end\n";
+    std::cout << "Mouse up end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::MoveTo360() {
 
-    std::cout << "360 with E start\n";
+    std::cout << "360 with E start"s << std::endl;
     for (int i = 0; i < 380; i++) {
         mouse_event(MOUSEEVENTF_MOVE, -10, 0, 0, 0);
         SimulateKeyPress('E');
         Sleep(20);
     }
-    std::cout << "360 with E end\n";
+    std::cout << "360 with E end"s << std::endl;
     Sleep(200);
 }
 
 void DropMode::TakeAll(Point take_all) {
-    std::cout << "Take all start\n";
+    std::cout << "Take all start"s << std::endl;
     SetCursorPos(take_all.x, take_all.y);   // take everything
     //mouse_click();
     left_button_.Click();
-    std::cout << "Take all end\n";
+    std::cout << "Take all end"s << std::endl;
     Sleep(500);
 }
 
 void DropMode::GiveAll(Point give_all) {
-    std::cout << "Drop in vault start\n";
+    std::cout << "Drop in vault start"s << std::endl;
     SetCursorPos(give_all.x, give_all.y);    // put everything
     left_button_.Click();
     std::cout << "Drop in vault end\n";
@@ -101,14 +105,14 @@ void DropMode::GiveAll(Point give_all) {
 }
 
 void DropMode::CloseInventory(Point close_invetory) {
-    std::cout << "Close inventory start\n";
+    std::cout << "Close inventory start"s << std::endl;
     SetCursorPos(close_invetory.x, close_invetory.y);
     left_button_.Click();
-    std::cout << "Close inventory end\n";
+    std::cout << "Close inventory end"s << std::endl;
     Sleep(500);
 }
 
-void DropMode::LootingCrete(std::string& teleport_name, bool take, Point search_window, Point tp_name_s, Point teleporting, Point take_all, Point give_all, Point close_invetory) {
+void DropMode::LootingCrete(std::string& current_tp_name, bool take) {
 
     system("cls");
     Sleep(5000);
@@ -116,151 +120,279 @@ void DropMode::LootingCrete(std::string& teleport_name, bool take, Point search_
 
     OpenTp();
 
-    SearchClick(search_window);
+    SearchClick(settings_.search_window);
 
-    EnterTpName(teleport_name);
+    EnterTpName(current_tp_name);
 
-    ClickToTpName(tp_name_s);
+    ClickToTpName(settings_.first_tp_name_in_list);
 
-    ClickToTeleporting(teleporting);
+    ClickToTeleporting(settings_.teleporting);
 
-    std::cout << "Sleep 10s\n";
+    std::cout << "Sleep 10s"s << std::endl;
     Sleep(10000);
 
     MouseUp();
 
     MoveTo360();
     if (take == true) {
-        TakeAll(take_all);
+        TakeAll(settings_.take_all);
     }
     if (take == false) {
-        GiveAll(give_all);
+        GiveAll(settings_.give_all);
     }
-    CloseInventory(close_invetory);
+    CloseInventory(settings_.close_invetory);
 
-    std::cout << "Sleep 10s\n";
+    std::cout << "Sleep 10s"s << std::endl;
     Sleep(10000);
 }
 
-Point DropMode::ParseButtonCoords(const std::string& input) {
-    Point result;
-    std::istringstream iss(input);
-    iss >> result.x >> result.y;
-    return result;
-}
+void DropMode::SetSettings() {
 
-void DropMode::GetCursorPositionDrop(Point& coords) noexcept {
+    std::ifstream input;
+    input.open(path_settings_);
+    if (!input.is_open()) {
+        std::cout << "settings were not saved file could not open file"s << std::endl;
+        return;
+    }
+    std::string line;
+    std::size_t counter = 0;
+    bool settings_is_found = false;
 
-    POINT* pCursorPos = new POINT;
-    bool customcoords = true;
-    std::cout << "F1 - Get cursor position\nF2 - Disable\n";
-    while (customcoords) {
-        if (GetAsyncKeyState(VK_F1)) {
-            if (GetCursorPos(pCursorPos)) {
-                coords.x = pCursorPos->x;
-                coords.y = pCursorPos->y;
-                std::cout << "X: " << coords.x << ", Y: " << coords.y << std::endl;
-                return;
+    while (std::getline(input, line)) {
+
+        if (settings_is_found == true && line != "") {
+
+            if (counter == 6 || counter == 7) {
+                std::vector<std::string> tp_names = ParseName(line);
+                if (counter == 6) {
+                    teleports_name_ = std::move(tp_names);
+                    continue;
+                }
+                else {
+                    save_teleport_name_ = tp_names.at(0);
+                }
+            }
+
+            std::pair<int, int> coords = ParseCoords(line);
+
+            switch (counter) {
+            case 0:
+                settings_.search_window.x = coords.first;
+                settings_.search_window.y = coords.second;
+                break;
+            case 1:
+                settings_.first_tp_name_in_list.x = coords.first;
+                settings_.first_tp_name_in_list.y = coords.second;
+                break;
+            case 2:
+                settings_.teleporting.x = coords.first;
+                settings_.teleporting.y = coords.second;
+                break;
+            case 3:
+                settings_.take_all.x = coords.first;
+                settings_.take_all.y = coords.second;
+                break;
+            case 4:
+                settings_.give_all.x = coords.first;
+                settings_.give_all.y = coords.second;
+                break;
+            case 5:
+                settings_.close_invetory.x = coords.first;
+                settings_.close_invetory.y = coords.second;
+                break;
             }
         }
-        Sleep(20);
+        
+        if (line == "DropMode"s) {
+            settings_is_found = true;
+            continue;
+        }
+
+        if (settings_is_found == true && line == "") {
+            input.close();
+            return;
+        }
     }
+
+    throw std::logic_error("Unknow error the file may be empty"s);
 }
 
-void DropMode::SupplyCreate() {
+void DropMode::EditCoords() {
+    Sleep(400);
+    std::ifstream input;
+    input.open(path_settings_);
+
+    if (!input.is_open()) {
+        std::cout << path_settings_ << " file was not created or opened"s << std::endl;
+        return;
+    }
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (std::getline(input, line)) {
+        lines.push_back(line);
+    }
+
+    input.close();
+
+    for (std::size_t i = 0; i < 6; i++) {
+        
+        switch (i) {
+        case 0:
+            std::cout << "specify the coordinates of the search window (entering the name of the teleport)"s << std::endl;
+            GetSetCursorPosition(settings_.search_window.x, settings_.search_window.y);
+            break;
+        case 1:
+            std::cout << "indicate the coordinates of the first teleport in the list"s << std::endl;
+            GetSetCursorPosition(settings_.first_tp_name_in_list.x, settings_.first_tp_name_in_list.y);
+            break;
+        case 2:
+            std::cout << "indicate the coordinates of the main teleportation button"s << std::endl;
+            GetSetCursorPosition(settings_.teleporting.x, settings_.teleporting.y);
+            break;
+        case 3:
+            std::cout << "indicate the coordinates of the take all button"s << std::endl;
+            GetSetCursorPosition(settings_.take_all.x, settings_.take_all.y);
+            break;
+        case 4:
+            std::cout << "indicate the coordinates of the give all button"s << std::endl;
+            GetSetCursorPosition(settings_.give_all.x, settings_.give_all.y);
+            break;
+        case 5:
+            std::cout << "indicate the coordinates of the close inventory button"s << std::endl;
+            GetSetCursorPosition(settings_.close_invetory.x, settings_.close_invetory.y);
+            break;
+        }
+    }
+
+    lines[16] = "search_window: "s + std::to_string(settings_.search_window.x) + ", "s + std::to_string(settings_.search_window.y);
+    lines[17] = "first_tp_name_in_list: "s + std::to_string(settings_.first_tp_name_in_list.x) + ", "s + std::to_string(settings_.first_tp_name_in_list.y);
+    lines[18] = "teleporting: "s + std::to_string(settings_.teleporting.x) + ", "s + std::to_string(settings_.teleporting.y);
+    lines[19] = "take_all: "s + std::to_string(settings_.take_all.x) + ", "s + std::to_string(settings_.take_all.y);
+    lines[20] = "give_all: "s + std::to_string(settings_.give_all.x) + ", "s + std::to_string(settings_.search_window.y);
+    lines[21] = "close_inventory: "s + std::to_string(settings_.close_invetory.x) + ", "s + std::to_string(settings_.close_invetory.y);
+
+    std::ofstream out;
+    out.open(path_settings_);
+    if (!out.is_open()) {
+        std::cout << "Couldn't open the file: "s << path_settings_ << std::endl;
+        return;
+    }
+    for (const auto& a : lines) {
+        out << a << std::endl;
+    }
+    out.close();
+    mode_selection.first = Command::NONE;
+    mode_selection.second = Command::NONE;
+    drop_mode_command = DropModeEnum::NONE;
+}
+
+void DropMode::EditTpName(){
+
+    Sleep(400);
+    std::cout << "the name of the teleport with the safe is indicated last; it does not need to be taken into account in the total number"s << std::endl << std::endl;
+
+    std::cout << "(all letters must be in big case)"s << std::endl;
+    std::cout << "example:\nDROP\nDROP1\nDROP 2\nDROP SAVE\netc."s << std::endl << std::endl;
+
+    std::cout << "\n\nindicate the number of teleports (1,2,3,4.....N)"s << std::endl;
+    
+    int tp_n = 0;
+    std::cout << "Enter number: "s;
+    std::cin >> tp_n;
+    std::vector<std::string> teleport_name;
+    teleport_name.reserve(tp_n + 1);
+    if (tp_n < 0) {
+        tp_n = std::abs(tp_n);
+    }
+#ifdef max
+#undef max
+#endif
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    Sleep(1000);
+
+    for (int i = 0; i < tp_n; i++) {
+        std::cout << i + 1 << " Enter tp name: "s;
+        std::string result;
+        std::getline(std::cin, result);
+        teleport_name.push_back(result);
+    }
+    std::string save_tp;
+    std::cout << "Enter save (vault) tp: "s;
+    std::getline(std::cin, save_tp);
+
+    std::ifstream input;
+    input.open(path_settings_);
+    if (!input.is_open()) {
+        std::cout << path_settings_ << " file was not created or opened"s << std::endl;
+        return;
+    }
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(input, line)) {
+        lines.push_back(line);
+    }
+    std::string result;
+    result += "name of teleports: "s;
+    for (std::size_t i = 0; i < teleport_name.size(); i++) {
+        if (i != teleport_name.size() - 1) {
+            result += teleport_name.at(i);
+            result += ", ";
+        }
+        else {
+            result += teleport_name.at(i);
+        }
+    }
+
+    lines[23] = result;
+    lines[24] = "name of teleport for saving loot: "s + save_tp;
+
+    std::ofstream out;
+    out.open(path_settings_);
+    if (!out.is_open()) {
+        std::cout << "Couldn't open the file: "s << path_settings_ << std::endl;
+        return;
+    }
+    for (const auto& a : lines) {
+        out << a << std::endl;
+    }
+    out.close();
+    mode_selection.first = Command::NONE;
+    mode_selection.second = Command::NONE;
+    drop_mode_command = DropModeEnum::NONE;
+}
+
+void DropMode::EditSettings(){
+
+    system("cls");
+
+    std::cout << "F1 - Edit coords pos"s << std::endl;
+    std::cout << "F2 - Edit drop name"s << std::endl;
+
+    while (mode_selection.first == Command::EDIT_DROP_MODE) {
+        if (mode_selection.second == Command::EDIT_DROP_COORD) {
+            EditCoords();
+            return;
+        }
+        if (mode_selection.second == Command::EDIT_DROP_NAME) {
+            EditTpName();
+            return;
+        }
+        Sleep(100);
+    }
+
+}
+
+void DropMode::StartLooting() {
 
     Sleep(500);
     system("cls");
 
-    Point search_window;
-    search_window.x = 391;
-    search_window.y = 965;
-
-    Point tp_name_s;
-    tp_name_s.x = 241;
-    tp_name_s.y = 218;
-
-    Point teleporting;
-    teleporting.x = 1656;
-    teleporting.y = 964;
-
-    Point take_all;
-    take_all.x = 1379;
-    take_all.y = 199;
-
-    Point give_all;
-    give_all.x = 358;
-    give_all.y = 196;
-
-    Point close_invetory;
-    close_invetory.x = 1798;
-    close_invetory.y = 65;
-
-    std::vector<WPARAM> spam_words;
-    std::vector<std::string> teleport_name; //= { "DROP1", "DROP2" };
-    std::string vault_tp = "DROP LOOT";
-
-    {
-        std::ifstream file_coords;
-        
-        if (FileExists(path_to_file_with_coords_)) {
-
-            file_coords.open(path_to_file_with_coords_);
-            std::string line;
-            int number_line = 0;
-            while (std::getline(file_coords, line)) {
-
-                if (number_line == 0) {
-                    search_window = ParseButtonCoords(line);
-                }
-                else if (number_line == 1) {
-                    tp_name_s = ParseButtonCoords(line);
-                }
-                else if (number_line == 2) {
-                    teleporting = ParseButtonCoords(line);
-                }
-                else if (number_line == 3) {
-                    take_all = ParseButtonCoords(line);
-                }
-                else if (number_line == 4) {
-                    give_all = ParseButtonCoords(line);
-                }
-                else if (number_line == 5) {
-                    close_invetory = ParseButtonCoords(line);
-                }
-                ++number_line;
-            }
-            file_coords.close();
-        }
-        else {
-            std::cout << "File '" << path_to_file_with_coords_ << "' does not exist.\n" << "Set the coordinates (F2) or the standard ones will be used(1920x1080)\n\n\n";
-        }
-    }
-
-    {
-        std::ifstream file_name;
-
-        if (FileExists(path_to_the_file_with_the_names_of_teleports_)) {
-
-            file_name.open(path_to_the_file_with_the_names_of_teleports_);
-
-            std::string line;
-            while (std::getline(file_name, line)) {
-                teleport_name.push_back(line);
-            }
-            std::ifstream vault_name;
-            vault_name.open(path_to_the_file_with_the_name_of_save_teleports_);
-            std::getline(vault_name, vault_tp);
-            vault_name.close();
-            file_name.close();
-        }
-        else {
-            std::cout << "File '" << path_to_the_file_with_the_names_of_teleports_ << "' does not exist.\n(Set tp name(F3))\n\n\n";
-        }
-    }
-    std::cout << "F1 - start\n";
-    std::cout << "F2 - set coords\n";
-    std::cout << "F3 - set teleport name\n";
+    std::cout << "F1 - start"s << std::endl;
+    std::cout << "F2 - set coords"s << std::endl;
+    std::cout << "F3 - set teleport name"s << std::endl;
 
     int food = 0;
 
@@ -268,13 +400,13 @@ void DropMode::SupplyCreate() {
 
         if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
 
-            if (teleport_name.size() == 0) {
-                std::cout << "tp_name not found\n\nSleep 10s";
+            if (teleports_name_.size() == 0) {
+                std::cout << "tp_name not found\n\nSleep 10s"s;
                 Sleep(10000);
                 system("cls");
-                std::cout << "F1 - start\n";
-                std::cout << "F2 - set coords\n";
-                std::cout << "F3 - set teleport name\n";
+                std::cout << "F1 - start"s << std::endl;
+                std::cout << "F2 - set coords"s << std::endl;
+                std::cout << "F3 - set teleport name"s << std::endl;
                 break;
             }
             AllocConsole();
@@ -285,16 +417,16 @@ void DropMode::SupplyCreate() {
 
             while (true) {
 
-                for (int i = 0; i < teleport_name.size(); i++) {
-                    std::string tp_name = teleport_name[i];
-                    LootingCrete(tp_name, true, search_window, tp_name_s, teleporting, take_all, give_all, close_invetory);
+                for (int i = 0; i < teleports_name_.size(); i++) {
+                    std::string tp_name = teleports_name_[i];
+                    LootingCrete(tp_name, true);
                     Sleep(5000);
                     system("cls");
                     std::cin.clear();
                     std::cout << "Next tp\n";
                 }
                 Sleep(500);
-                LootingCrete(vault_tp, false, search_window, tp_name_s, teleporting, take_all, give_all, close_invetory);
+                LootingCrete(save_teleport_name_, false);
                 if (food == 3) {
                     SimulateKeyPress('1');
                     SimulateKeyPress('2');
@@ -302,113 +434,16 @@ void DropMode::SupplyCreate() {
                 }
                 ++food;
                 system("cls");
-                std::cout << "Sleep 10 min\n";
+                std::cout << "Sleep 10 min"s << std::endl;
                 Sleep(600000);
                 system("cls");
             }
         }
         if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS && drop_mode_command == DropModeEnum::EDIT_COORDS) {
-            system("cls");
-            for (int i = 0; i < 6; i++) {
-                if (i == 0) {
-                    std::cout << "Set Search window (bottom left of screen(search))\n";
-                    GetCursorPositionDrop(search_window);
-                    Sleep(500);
-                }
-                else if (i == 1) {
-                    std::cout << "indicate the coordinates of the first teleport in the list\n";
-                    GetCursorPositionDrop(tp_name_s);
-                    Sleep(500);
-                }
-                else if (i == 2) {
-                    std::cout << "Coordinates of the main button for teleportation\n";
-                    GetCursorPositionDrop(teleporting);
-                    Sleep(500);
-                }
-                else if (i == 3) {
-                    std::cout << "Coordinates of the transfer all button (NOT your inventory)\n";
-                    GetCursorPositionDrop(take_all);
-                    Sleep(500);
-                }
-                else if (i == 4) {
-                    std::cout << "Coordinates of the transfer all button (your inventory)\n";
-                    GetCursorPositionDrop(give_all);
-                    Sleep(500);
-                }
-                else if (i == 5) {
-                    std::cout << "Coordinates of the button to close the inventory (upper right corner)\n";
-                    GetCursorPositionDrop(close_invetory);
-                    Sleep(500);
-                }
-                system("cls");
-                drop_mode_command = DropModeEnum::NONE;
-            }
-            std::ofstream out;
-            if (out.is_open()) {
-                out << search_window.x << " " << search_window.y << std::endl;
-                out << tp_name_s.x << " " << tp_name_s.y << std::endl;
-                out << teleporting.x << " " << teleporting.y << std::endl;
-                out << take_all.x << " " << take_all.y << std::endl;
-                out << give_all.x << " " << give_all.y << std::endl;
-                out << close_invetory.x << " " << close_invetory.y << std::endl;
-            }
-            else {
-                std::cerr << "No" << std::endl;
-            }
-            out.close();
-            MenuMessage();
-            return;
+            EditCoords();
         }
         if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS && drop_mode_command == DropModeEnum::EDIT_TP_NAME) {
-            teleport_name.clear();
-
-            ClearFile(path_to_the_file_with_the_names_of_teleports_);
-            ClearFile(path_to_the_file_with_the_name_of_save_teleports_);
-
-            system("cls");
-            std::cout << "the name of the teleport with the safe is indicated last; it does not need to be taken into account in the total number\n\n";
-
-            std::cout << "(all letters must be in big case)\nexample:\nDROP\nDROP1\nDROP 2\nDROP SAVE\netc.\n\n";
-            std::cout << "\n\nindicate the number of teleports (1,2,3,4.....N)\n";
-            int tp_n = 0;
-            std::cout << "Enter number: ";
-            std::cin >> tp_n;
-            if (tp_n < 0) {
-                tp_n = std::abs(tp_n);
-            }
-#ifdef max
-#undef max
-#endif
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            Sleep(1000);
-
-            for (int i = 0; i < tp_n; i++) {
-                std::cout << i + 1 << " Enter tp name: ";
-                std::string result;
-                std::getline(std::cin, result);
-                teleport_name.push_back(result);
-            }
-
-            std::cout << "Enter vault tp: ";
-            std::getline(std::cin, vault_tp);
-
-            std::ofstream out;
-            out.open(path_to_the_file_with_the_names_of_teleports_);
-            for (int i = 0; i < teleport_name.size(); i++) {
-                out << teleport_name[i] << "\n";
-            }
-            out.close();
-
-            out.open(path_to_the_file_with_the_name_of_save_teleports_);
-            out << vault_tp;
-
-            out.close();
-            system("cls");
-            MenuMessage();
-            drop_mode_command = DropModeEnum::NONE;
-            return;
+            EditTpName();
         }
         Sleep(20);
     }

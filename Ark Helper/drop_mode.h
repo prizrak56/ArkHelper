@@ -1,14 +1,21 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "utils.h"
 #include "clicker.h"
 
 class DropMode {
-public:
-
-	void SupplyCreate();
-
 private:
+
+	struct DropCoordsPosSettings {
+		Point search_window;
+		Point first_tp_name_in_list;
+		Point teleporting;
+		Point take_all;
+		Point give_all;
+		Point close_invetory;
+	};
+
 	void MouseDown();
 	void OpenTp();
 	void SearchClick(Point search_window);
@@ -20,12 +27,28 @@ private:
 	void TakeAll(Point take_all);
 	void GiveAll(Point give_all);
 	void CloseInventory(Point close_invetory);
-	void LootingCrete(std::string& teleport_name, bool take, Point search_window, Point tp_name_s, Point teleporting, Point take_all, Point give_all, Point close_invetory);
+	void LootingCrete(std::string& current_tp_name, bool take);
 
-	Point ParseButtonCoords(const std::string& input);
-	void GetCursorPositionDrop(Point& coords) noexcept;
+	void SetSettings();
+	void EditCoords();
+	void EditTpName();
+
+public:
+
+	void EditSettings();
+
+	DropMode(std::string& settings_path);
+	void StartLooting();
+
+private:
+
+	DropCoordsPosSettings settings_;
+	std::vector<std::string> teleports_name_;
+	std::string save_teleport_name_;
 
 	LeftMouseClicker left_button_;
+
+	std::string path_settings_ = "C:\\ArkHelper\\settings.txt";
 
 	std::string path_to_file_with_coords_ = "C:\\ArkHelper\\drop.txt";
 	std::string path_to_the_file_with_the_names_of_teleports_ = "C:\\ArkHelper\\teleports_name.txt";

@@ -2,9 +2,11 @@
 #include <utility>
 #include <string>
 #include <windows.h>
+#include <vector>
 
 enum class Command{
 	NONE,
+	SLEEP,
 	LEFT_CLICK,
 	RIGHT_CLICK,
 	SPACE_CLICK,
@@ -17,6 +19,14 @@ enum class Command{
 	START,
 	SPAM_MODE,
 	DROP_MODE,
+	EDIT_SPAM_MOD,
+	EDIT_FARM_MODE,
+	EDIT_DROP_MODE,
+	EDIT_DROP_COORD,
+	EDIT_DROP_NAME,
+	EDIT_WEBHOOK,
+	EDIT_FARM_COORD,
+
 }; // class Command
 
 enum class Resources {
@@ -105,8 +115,16 @@ void ObServerSelectingModeFromTheFirstPage();
 
 void ObServerSelectingModeFromTheSecondPage();
 
+void ObServerEditDropModeSettings();
+
 bool FileExists(std::string& path);
 
 void ClearFile(std::string& path);
 
 void SimulateKeyPress(WORD keyCode);
+
+void CheckFileSettings(std::string& path);
+
+void GetSetCursorPosition(int& x, int& y);
+
+void EditWebhook(std::string& path);

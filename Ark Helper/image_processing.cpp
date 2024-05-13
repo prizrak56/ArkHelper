@@ -5,6 +5,8 @@
 
 #include "image_processing.h"
 
+using namespace std::literals;
+
 // читаем текст и изображения
 // read text and images
 std::string ReadImage(const std::string& image_path) noexcept {
@@ -74,7 +76,7 @@ void CaptureScreen(const char* save_path, int x, int y, int width, int height) n
     // Open the file to save the screenshot
     FILE* file;
     if (fopen_s(&file, save_path, "wb") != 0) {
-        std::cerr << "Ошибка: Невозможно открыть файл для сохранения скриншота.\nError: The file to save the screenshot cannot be opened." << std::endl;
+        std::cerr << "Ошибка: Невозможно открыть файл для сохранения скриншота.\nError: The file to save the screenshot cannot be opened."s << std::endl;
         DeleteDC(h_capture_dc);
         DeleteObject(h_capture_bitmap);
         ReleaseDC(h_desktop_wnd, h_desktop_dc);

@@ -8,10 +8,91 @@
 #include <locale>
 #include <fstream>
 
+using namespace std::literals;
+
 ServerSpam::ServerSpam(std::string file_settings_path) : file_setting_(file_settings_path) {}
 
 ServerSpam::ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run) :
     file_setting_(file_settings_path), name_of_the_game_for_crash_process_(lp_process_name), name_of_the_game_to_search_in_case_of_crash_(name_of_the_process_to_run){}
+
+void ServerSpam::SetSettings(){
+
+    std::ifstream input;
+    input.open(file_setting_);
+    if (!input.is_open()) {
+        std::cout << file_setting_ << " file was not created or opened"s << std::endl;
+        return;
+    }
+
+    std::string line;
+    bool settings_is_found = false;
+
+    size_t counter = 0;
+
+    while (std::getline(input, line)) {
+
+        if (settings_is_found == true && line != "") {
+
+            std::pair<int, int> coords = ParseCoords(line);
+
+            switch (counter)
+            {
+            case 0:
+                settings_.press_to_start.x = coords.first;
+                settings_.press_to_start.y = coords.second;
+                break;
+            case 1:
+                settings_.search_server.x = coords.first;
+                settings_.search_server.y = coords.second;
+                break;
+            case 2:
+                settings_.refresh_server.x = coords.first;
+                settings_.refresh_server.y = coords.second;
+                break;
+            case 3:
+                settings_.join_to_server.x = coords.first;
+                settings_.join_to_server.y = coords.second;
+                break;
+            case 4:
+                settings_.join_to_server_mode.x = coords.first;
+                settings_.join_to_server_mode.y = coords.second;
+                break;
+            case 5:
+                settings_.first_server.x = coords.first;
+                settings_.first_server.y = coords.second;
+                break;
+            case 6:
+                settings_.create_ppl.x = coords.first;
+                settings_.create_ppl.y = coords.second;
+                break;
+            case 7:
+                settings_.server_not_found_back.x = coords.first;
+                settings_.server_not_found_back.y = coords.second;
+                break;
+            case 8:
+                settings_.server_not_found_back2.x = coords.first;
+                settings_.server_not_found_back2.y = coords.second;
+                break;
+            case 9:
+                settings_.exit_to_main_menu.x = coords.first;
+                settings_.exit_to_main_menu.y = coords.second;
+                break;
+            }
+            ++counter;
+            continue;
+        }
+
+        if (line == "ServerSpam"s) {
+            settings_is_found = true;
+            continue;
+        }
+
+        if (settings_is_found == true && line == "") {
+            input.close();
+            return;
+        }
+    }
+}
 
 void ServerSpam::SimulateCtrlV() {
     Sleep(500);
@@ -137,7 +218,7 @@ void ServerSpam::FindCrashProcess() {
     DWORD pid;
     GetWindowThreadProcessId(hwnd, &pid);
 
-    std::cout << "Subprocesses of PID " << pid << ":" << std::endl;
+    std::cout << "Subprocesses of PID "s << pid << ":" << std::endl;
 
     // Передаём PID приложения в качестве параметра для EnumWindowsProc
     EnumWindows(EnumWindowsProc, (LPARAM)&pid);
@@ -166,166 +247,87 @@ void ServerSpam::ApplyOrInitializeSettingsFromFile() {
 
     if (!FileExists(file_setting_)) {
         GetSetButtonPosition();
-        CreateFileWithSettings();
     }
-
-    std::ifstream input;
-    input.open(file_setting_);
-
-    if (!input.is_open()) {
-        std::cout << "Error open file" << std::endl;
-        mode_selection.second = Command::NONE;
-        EnableDisableFunc(Command::NONE);
-        return;
-    }
-
-    std::string value_y;
-    std::size_t index =0 ;
-    while (std::getline(input, value_y)) {
-
-        const auto pos = value_y.find(" ");
-        std::string value_x(value_y.begin(), value_y.begin() + pos);
-        value_x = value_y.substr(pos + 1, value_y.length());
-        switch (index){ 
-        case 0:
-            settings_.press_to_start.x = std::stoi(value_x);
-            settings_.press_to_start.y = std::stoi(value_y);
-            break;
-        case 1:
-            settings_.search_server.x = std::stoi(value_x);
-            settings_.search_server.y = std::stoi(value_y);
-            break;
-        case 2:
-            settings_.refresh_server.x = std::stoi(value_x);
-            settings_.refresh_server.y = std::stoi(value_y);
-            break;
-        case 3:
-            settings_.server_not_found_back.x = std::stoi(value_x);
-            settings_.server_not_found_back.y = std::stoi(value_y);
-            break;
-        case 4:
-            settings_.server_not_found_back2.x = std::stoi(value_x);
-            settings_.server_not_found_back2.y = std::stoi(value_y);
-            break;
-        case 5:
-            settings_.join_to_server.x = std::stoi(value_x);
-            settings_.join_to_server.y = std::stoi(value_y);
-            break;
-        case 6:
-            settings_.join_to_server_mode.x = std::stoi(value_x);
-            settings_.join_to_server_mode.y = std::stoi(value_y);
-            break;
-        case 7:
-            settings_.first_server.x = std::stoi(value_x);
-            settings_.first_server.y = std::stoi(value_y);
-            break;
-        case 8:
-            settings_.create_ppl.x = std::stoi(value_x);
-            settings_.create_ppl.y = std::stoi(value_y);
-            break;
-        case 9:
-            settings_.exit_to_main_menu.x = std::stoi(value_x);
-            settings_.exit_to_main_menu.y = std::stoi(value_y);
-            break;
-        }
-        ++index;
-    }
-}
-
-void ServerSpam::CreateFileWithSettings() {
-
-    std::ofstream out;
-    out.open(file_setting_);
-
-    ClearFile(file_setting_);
-
-    if (!out.is_open()) {
-        std::cout << "Error open file" << std::endl;
-        mode_selection.second = Command::NONE;
-        EnableDisableFunc(Command::NONE);
-        return;
-    }
-    out << settings_.press_to_start.x << " " << settings_.press_to_start.y << std::endl;
-
-    out << settings_.search_server.x << " " << settings_.search_server.y << std::endl;
-
-    out << settings_.refresh_server.x << " " << settings_.refresh_server.y << std::endl;
-
-    out << settings_.server_not_found_back.x << " " << settings_.server_not_found_back.y << std::endl;
-
-    out << settings_.server_not_found_back2.x << " " << settings_.server_not_found_back2.y << std::endl;
-
-    out << settings_.join_to_server.x << " " << settings_.join_to_server.y << std::endl;
-
-    out << settings_.join_to_server_mode.x << " " << settings_.join_to_server_mode.y << std::endl;
-
-    out << settings_.first_server.x << " " << settings_.first_server.y << std::endl;
-
-    out << settings_.create_ppl.x << " " << settings_.create_ppl.y << std::endl;
-
-    out << settings_.exit_to_main_menu.x << " " << settings_.exit_to_main_menu.y << std::endl;
+    SetSettings();
 }
 
 void ServerSpam::GetSetButtonPosition(){
 
     system("cls");
 
-    std::cout << "You need indicate the coordinate of the main button in the first menu of the upper left part of it" << std::endl;
+    std::cout << "You need indicate the coordinate of the main join button in the first menu of the upper left part of it (Press to start)"s << std::endl;
     GetSetCursorPosition(settings_.press_to_start.x, settings_.press_to_start.y);
 
-    std::cout << "specify the coordinate of the search menu from with server list" << std::endl;
+    std::cout << "specify the coordinate of the search menu from with server list"s << std::endl;
     GetSetCursorPosition(settings_.search_server.x, settings_.search_server.y);
 
-    std::cout << "specify the coordinate of the refresh button" << std::endl;
+    std::cout << "specify the coordinate of the refresh button"s << std::endl;
     GetSetCursorPosition(settings_.refresh_server.x, settings_.refresh_server.y);
 
-    std::cout << "specify the coordinate of the back button from the list of servers" << std::endl;
+    std::cout << "specify the coordinate of the back button from the list of servers"s << std::endl;
     GetSetCursorPosition(settings_.server_not_found_back.x, settings_.server_not_found_back.y);
 
-    std::cout << "specify the coordinates of the second back button" << std::endl;
+    std::cout << "specify the coordinates of the second back button"s << std::endl;
     GetSetCursorPosition(settings_.server_not_found_back2.x, settings_.server_not_found_back2.y);
 
-    std::cout << "indicate the coordinate of the first button to connect in the list of servers" << std::endl;
+    std::cout << "indicate the coordinate of the first button to connect in the list of servers"s << std::endl;
     GetSetCursorPosition(settings_.join_to_server.x, settings_.join_to_server.y);
 
-    std::cout << "specify the coordinates of the second button will connect (the button on the left side of the screen when opening the window with mods)" << std::endl;
+    std::cout << "specify the coordinates of the second button will connect (the button on the left side of the screen when opening the window with mods)"s << std::endl;
     GetSetCursorPosition(settings_.join_to_server_mode.x, settings_.join_to_server_mode.y);
 
-    std::cout << "indicate the coordinate of the first server in the list" << std::endl;
+    std::cout << "indicate the coordinate of the first server in the list"s << std::endl;
     GetSetCursorPosition(settings_.first_server.x, settings_.first_server.y);
 
-    std::cout << "indicate the coordinates of the character creation button when logging into the server" << std::endl;
+    std::cout << "indicate the coordinates of the character creation button when logging into the server"s << std::endl;
     GetSetCursorPosition(settings_.create_ppl.x, settings_.create_ppl.y);
 
-    std::cout << "specify the coordinates of the exit to main menu button" << std::endl;
+    std::cout << "specify the coordinates of the exit to main menu button"s << std::endl;
     GetSetCursorPosition(settings_.exit_to_main_menu.x, settings_.exit_to_main_menu.y);
 
-    system("cls");
-}
+    std::ifstream input;
 
-void ServerSpam::GetSetCursorPosition(int& x, int& y) {
+    input.open(file_setting_);
 
-    POINT* p_cursor_pos = new POINT;
-    bool button_pressed = false;
-
-    std::cout << "F1 - Get cursor position" << std::endl;
-    while (button_pressed == false) {
-
-        if (GetAsyncKeyState(VK_F1)) {
-            Beep(200, 200);
-            if (GetCursorPos(p_cursor_pos)) {
-                x = p_cursor_pos->x;
-                y = p_cursor_pos->y;
-                std::cout << "success" << std::endl;
-            }
-            else {
-                std::cout << "Failed to get cursor position" << std::endl;
-            }
-            button_pressed = true;
-            Sleep(300);
-        }
+    if (!input.is_open()) {
+        std::cout << "settings were not saved file could not open file"s << std::endl;
+        return;
     }
-    delete p_cursor_pos;
+
+    std::vector<std::string> lines;
+
+    std::string line;
+    while (std::getline(input,line)){
+        lines.push_back(line);
+    }
+    input.close();
+
+    lines[4] = "pess_to_start: "s + std::to_string(settings_.press_to_start.x) + ", " + std::to_string(settings_.press_to_start.y);
+    lines[5] = "search_server: "s + std::to_string(settings_.search_server.x) + ", " + std::to_string(settings_.search_server.y);
+    lines[6] = "refresh_server: "s + std::to_string(settings_.refresh_server.x) + ", " + std::to_string(settings_.refresh_server.y);
+    lines[7] = "join_to_server: "s + std::to_string(settings_.join_to_server.x) + ", " + std::to_string(settings_.join_to_server.y);
+    lines[8] = "join_to_server_mode: "s + std::to_string(settings_.join_to_server_mode.x) + ", " + std::to_string(settings_.join_to_server_mode.y);
+    lines[9] = "first_server: "s + std::to_string(settings_.first_server.x) + ", " + std::to_string(settings_.first_server.y);
+    lines[10] = "create_people: "s + std::to_string(settings_.create_ppl.x) + ", " + std::to_string(settings_.create_ppl.y);
+    lines[11] = "server_not_found_back: "s + std::to_string(settings_.server_not_found_back.x) + ", " + std::to_string(settings_.server_not_found_back.y);
+    lines[12] = "server_not_found_back2: "s + std::to_string(settings_.server_not_found_back2.x) + ", " + std::to_string(settings_.server_not_found_back2.y);
+    lines[13] = "exit_to_main_menu: "s + std::to_string(settings_.exit_to_main_menu.x) + ", " + std::to_string(settings_.exit_to_main_menu.y);
+
+    std::ofstream out;
+    out.open(file_setting_);
+
+    if (!out.is_open()) {
+        std::cout << "settings were not saved file could not open file"s << std::endl;
+        return;
+    }
+
+    for (const auto& str : lines) {
+        out << str << std::endl;
+    }
+
+    out.close();
+
+    system("cls");
 }
 
 void ServerSpam::EnterText() {
@@ -347,21 +349,20 @@ void ServerSpam::SpamStart() {
 
     AllocConsole();
 
-    std::cout << "Press F1 - to start" << std::endl;
-    std::cout << "Press F2 - to edit settings" << std::endl;
+    std::cout << "Press F1 - to start"s << std::endl;
+    std::cout << "Press F2 - to edit settings"s << std::endl;
 
     while (mode_selection.first == Command::SPAM_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
 
         if (spam_command == SpamCommand::EDIT) {
             GetSetButtonPosition();
-            CreateFileWithSettings();
             spam_command = SpamCommand::NONE;
         }
         Sleep(100);
     }
-    std::cout << "Enter server number to get started: ";
+    std::cout << "Enter server number to get started: "s;
     std::cin >> server_number_;
-    std::cout << "Prees F1 - to get start\n";
+    std::cout << "Prees F1 - to get start"s << std::endl;
 
     HWND console_window = GetConsoleWindow();
 
@@ -374,49 +375,49 @@ void ServerSpam::SpamStart() {
 
         while (spam_command == SpamCommand::START) {
 
-            std::cout << "PressToStart();" << std::endl;
+            std::cout << "PressToStart();"s << std::endl;
             PressToStart();
 
-            std::cout << "SearchServer();" << std::endl;
+            std::cout << "SearchServer();"s << std::endl;
             Sleep(500);
             SearchServer();
             
-            std::cout << "RefreshServer();" << std::endl;
+            std::cout << "RefreshServer();"s << std::endl;
             Sleep(2000);
             RefreshServer();
 
-            std::cout << "JoinToServer();" << std::endl;
+            std::cout << "JoinToServer();"s << std::endl;
             Sleep(2000);
             JoinToServer();
 
-            std::cout << "CreateToPeople();" << std::endl;
+            std::cout << "CreateToPeople();"s << std::endl;
             Sleep(4000);
             CreateToPeople();
 
-            std::cout << "EnterText();" << std::endl;
+            std::cout << "EnterText();"s << std::endl;
             Sleep(500);
             SimulateCtrlV();
 
-            std::cout << "ServerBackBack();" << std::endl;
+            std::cout << "ServerBackBack();"s << std::endl;
             Sleep(500);
             ServerBackBack();
 
-            std::cout << "ServerLeave();" << std::endl;
+            std::cout << "ServerLeave();"s << std::endl;
             Sleep(200);
             ServerLeave();
 
-            std::cout << "FindCrashProcess();" << std::endl;
+            std::cout << "FindCrashProcess();"s << std::endl;
             Sleep(5000);
             FindCrashProcess();
 
             if (crash_on_) {
-                std::cout << "OpenSearchMenu();" << std::endl;
+                std::cout << "OpenSearchMenu();"s << std::endl;
                 OpenSearchMenu();
                 Sleep(45000);
                 crash_on_ = false;
                 process_names_.clear();
             }
-            std::cout << "Server number: " << server_number_ << std::endl;
+            std::cout << "Server number: "s << server_number_ << std::endl;
 
             // max server number
             if (server_number_ >= last_server_number_) {
