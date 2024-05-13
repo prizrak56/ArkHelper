@@ -18,15 +18,15 @@ private:
 
 	void MouseDown();
 	void OpenTp();
-	void SearchClick(Point search_window);
+	void SearchClick();
 	void EnterTpName(std::string& teleport_name);
-	void ClickToTpName(Point tp_name_s);
-	void ClickToTeleporting(Point teleporting);
+	void ClickToTpName();
+	void ClickToTeleporting();
 	void MouseUp();
 	void MoveTo360();
-	void TakeAll(Point take_all);
-	//void GiveAll();
-	void CloseInventory(Point close_invetory);
+	void TakeAll();
+	void GiveAll();
+	void CloseInventory();
 	void LootingCrete(std::string& current_tp_name, bool take);
 
 	void SetSettings();
@@ -34,9 +34,8 @@ private:
 	void EditTpName();
 
 public:
-	void GiveAll();
-	void EditSettings();
 
+	void EditSettings();
 	DropMode(std::string& settings_path);
 	void StartLooting();
 

@@ -28,9 +28,9 @@ void DropMode::OpenTp() {
     Sleep(1000);
 }
 
-void DropMode::SearchClick(Point search_window) {
+void DropMode::SearchClick() {
     std::cout << "Search click start" << std::endl;
-    SetCursorPos(search_window.x, search_window.y);
+    SetCursorPos(settings_.search_window.x, settings_.search_window.y);
     Sleep(500);
     left_button_.Click();
     std::cout << "Search click end"s << std::endl;
@@ -48,19 +48,19 @@ void DropMode::EnterTpName(std::string& teleport_name) {
     Sleep(200);
 }
 
-void DropMode::ClickToTpName(Point tp_name_s) {
+void DropMode::ClickToTpName() {
     std::cout << "Click to tp name start"s << std::endl;
     Sleep(500);
-    SetCursorPos(tp_name_s.x, tp_name_s.y);
+    SetCursorPos(settings_.first_tp_name_in_list.x, settings_.first_tp_name_in_list.y);
     Sleep(500);
     left_button_.Click();
     std::cout << "Click to tp name end"s << std::endl;
     Sleep(200);
 }
 
-void DropMode::ClickToTeleporting(Point teleporting) {
+void DropMode::ClickToTeleporting() {
     std::cout << "teleporting start" << std::endl;
-    SetCursorPos(teleporting.x, teleporting.y); //teleport
+    SetCursorPos(settings_.teleporting.x, settings_.teleporting.y); //teleport
     Sleep(500);
     left_button_.Click();
     std::cout << "teleporting end"s << std::endl;
@@ -89,10 +89,10 @@ void DropMode::MoveTo360() {
     Sleep(200);
 }
 
-void DropMode::TakeAll(Point take_all) {
+void DropMode::TakeAll() {
     Sleep(500);
     std::cout << "Take all start"s << std::endl;
-    SetCursorPos(take_all.x, take_all.y);   // take everything
+    SetCursorPos(settings_.take_all.x, settings_.take_all.y);   // take everything
     Sleep(200);
     left_button_.Click();
     std::cout << "Take all end"s << std::endl;
@@ -109,10 +109,10 @@ void DropMode::GiveAll() {
     Sleep(500);
 }
 
-void DropMode::CloseInventory(Point close_invetory) {
+void DropMode::CloseInventory() {
     Sleep(500);
     std::cout << "Close inventory start"s << std::endl;
-    SetCursorPos(close_invetory.x, close_invetory.y);
+    SetCursorPos(settings_.close_invetory.x, settings_.close_invetory.y);
     left_button_.Click();
     std::cout << "Close inventory end"s << std::endl;
     Sleep(500);
@@ -126,13 +126,13 @@ void DropMode::LootingCrete(std::string& current_tp_name, bool take) {
 
     OpenTp();
 
-    SearchClick(settings_.search_window);
+    SearchClick();
 
     EnterTpName(current_tp_name);
 
-    ClickToTpName(settings_.first_tp_name_in_list);
+    ClickToTpName();
 
-    ClickToTeleporting(settings_.teleporting);
+    ClickToTeleporting();
 
     std::cout << "Sleep 10s"s << std::endl;
     Sleep(10000);
@@ -141,12 +141,12 @@ void DropMode::LootingCrete(std::string& current_tp_name, bool take) {
 
     MoveTo360();
     if (take == true) {
-        TakeAll(settings_.take_all);
+        TakeAll();
     }
     if (take == false) {
         GiveAll();
     }
-    CloseInventory(settings_.close_invetory);
+    CloseInventory();
 
     std::cout << "Sleep 10s"s << std::endl;
     Sleep(10000);
