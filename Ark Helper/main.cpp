@@ -166,6 +166,7 @@ int main() {
 			break;
 
 		case Command::EDIT_WEBHOOK:
+			system("cls");
 			EditWebhook(settings_path);
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
@@ -176,6 +177,7 @@ int main() {
 			break;
 
 		case Command::EDIT_FARM_COORD:
+			system("cls");
 			farm.EditCoords();
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;

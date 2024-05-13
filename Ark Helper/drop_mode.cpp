@@ -73,7 +73,7 @@ void DropMode::MouseUp() {
     for (int i = 0; i < 4/*67*/; i++) {
         mouse_event(MOUSEEVENTF_MOVE, 0, -10, 0, 0);
     }
-    std::cout << "Mouse up end"s << std::endl;
+    std::cout << "Mouse up end"s << std::endl; 
     Sleep(200);
 }
 
