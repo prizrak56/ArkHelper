@@ -24,4 +24,5 @@ private:
 	const std::string cmd_for_image_message_ = "curl -F \"file1=@";
 
 	std::string webhook_path_ = "C:\\ArkHelper\\settings.txt";
+
 }; //class DiscordWebhook 

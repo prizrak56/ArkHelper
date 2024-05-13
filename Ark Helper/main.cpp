@@ -46,8 +46,21 @@ int main() {
 
 	MenuMessage();
 
+	Page last_page = Page::NONE;
+
 	while (true) {
 		
+		if (page_menu == Page::FIRST && last_page != Page::FIRST) {
+			last_page = Page::FIRST;
+			system("cls");
+			MenuMessage();
+		}
+		else if (page_menu == Page::SECOND && last_page != Page::SECOND){
+			last_page = Page::SECOND;
+			system("cls");
+			MenuMessage2();
+		}
+
 		switch (mode_selection.first) {
 
 		case Command::LEFT_CLICK:

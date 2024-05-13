@@ -97,6 +97,9 @@ void ObServer() {
 			if (page_menu == Page::SECOND && mode_selection.first == Command::NONE && mode_selection.second == Command::NONE) {
 				ObServerSelectingModeFromTheSecondPage();
 			}
+			/*if (page_menu == Page::SECOND && mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
+
+			}*/
 			break;
 		}
 	}
@@ -105,7 +108,6 @@ void ObServer() {
 void ObServerDropModeSelectSettings(){
 	while (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
 		if (GetAsyncKeyState(VK_F1)) {
-			EnableDisableFunc(Command::DROP_MODE);
 			mode_selection.second = Command::START;
 		}
 		if (GetAsyncKeyState(VK_F2)) {
@@ -285,8 +287,7 @@ void ObServerSelectingModeFromTheFirstPage(){
 		}
 		if (GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F2)) {
 			page_menu = Page::SECOND;
-			system("cls");
-			MenuMessage2();
+			Sleep(500);
 		}
 		Sleep(100);
 	}
@@ -298,8 +299,7 @@ void ObServerSelectingModeFromTheSecondPage(){
 
 		if (GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F1)) {
 			page_menu = Page::FIRST;
-			system("cls");
-			MenuMessage();
+			Sleep(500);
 		}
 		if (!GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F1)) {
 			EnableDisableFunc(Command::DROP_MODE);

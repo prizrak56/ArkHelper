@@ -8,7 +8,9 @@
 
 using namespace std::literals;
 
-DropMode::DropMode(std::string& settings_path) : path_settings_(settings_path) {}
+DropMode::DropMode(std::string& settings_path) : path_settings_(settings_path) {
+    SetSettings();
+}
 
 void DropMode::MouseDown() {
     std::cout << "Mouse down start"s << std::endl;
@@ -68,7 +70,7 @@ void DropMode::ClickToTeleporting(Point teleporting) {
 void DropMode::MouseUp() {
 
     std::cout << "Mouse up start"s << std::endl;
-    for (int i = 0; i < 67; i++) {
+    for (int i = 0; i < 4/*67*/; i++) {
         mouse_event(MOUSEEVENTF_MOVE, 0, -10, 0, 0);
     }
     std::cout << "Mouse up end"s << std::endl;
@@ -162,45 +164,52 @@ void DropMode::SetSettings() {
 
         if (settings_is_found == true && line != "") {
 
-            if (counter == 6 || counter == 7) {
+            if (counter == 7 || counter == 8) {
                 std::vector<std::string> tp_names = ParseName(line);
-                if (counter == 6) {
+                if (counter == 7) {
                     teleports_name_ = std::move(tp_names);
-                    continue;
                 }
                 else {
                     save_teleport_name_ = tp_names.at(0);
                 }
+                ++counter;
+                continue;
             }
 
-            std::pair<int, int> coords = ParseCoords(line);
+            if (counter != 6) {
+                std::pair<int, int> coords = ParseCoords(line);
 
-            switch (counter) {
-            case 0:
-                settings_.search_window.x = coords.first;
-                settings_.search_window.y = coords.second;
-                break;
-            case 1:
-                settings_.first_tp_name_in_list.x = coords.first;
-                settings_.first_tp_name_in_list.y = coords.second;
-                break;
-            case 2:
-                settings_.teleporting.x = coords.first;
-                settings_.teleporting.y = coords.second;
-                break;
-            case 3:
-                settings_.take_all.x = coords.first;
-                settings_.take_all.y = coords.second;
-                break;
-            case 4:
-                settings_.give_all.x = coords.first;
-                settings_.give_all.y = coords.second;
-                break;
-            case 5:
-                settings_.close_invetory.x = coords.first;
-                settings_.close_invetory.y = coords.second;
-                break;
+                switch (counter) {
+                case 0:
+                    settings_.search_window.x = coords.first;
+                    settings_.search_window.y = coords.second;
+                    break;
+                case 1:
+                    settings_.first_tp_name_in_list.x = coords.first;
+                    settings_.first_tp_name_in_list.y = coords.second;
+                    break;
+                case 2:
+                    settings_.teleporting.x = coords.first;
+                    settings_.teleporting.y = coords.second;
+                    break;
+                case 3:
+                    settings_.take_all.x = coords.first;
+                    settings_.take_all.y = coords.second;
+                    break;
+                case 4:
+                    settings_.give_all.x = coords.first;
+                    settings_.give_all.y = coords.second;
+                    break;
+                case 5:
+                    settings_.close_invetory.x = coords.first;
+                    settings_.close_invetory.y = coords.second;
+                    break;
+                default:
+                    break;
+                }
             }
+            ++counter;
+            continue;
         }
         
         if (line == "DropMode"s) {
@@ -396,7 +405,7 @@ void DropMode::StartLooting() {
 
     int food = 0;
 
-    while (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
+    while (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS || mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
 
         if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
 
