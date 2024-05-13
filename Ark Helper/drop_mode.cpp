@@ -93,16 +93,17 @@ void DropMode::TakeAll(Point take_all) {
     Sleep(500);
     std::cout << "Take all start"s << std::endl;
     SetCursorPos(take_all.x, take_all.y);   // take everything
-    //mouse_click();
+    Sleep(200);
     left_button_.Click();
     std::cout << "Take all end"s << std::endl;
     Sleep(500);
 }
 
-void DropMode::GiveAll(Point give_all) {
+void DropMode::GiveAll() {
     Sleep(500);
     std::cout << "Drop in vault start"s << std::endl;
-    SetCursorPos(give_all.x, give_all.y);    // put everything
+    SetCursorPos(settings_.give_all.x, settings_.give_all.y);
+    Sleep(200);
     left_button_.Click();
     std::cout << "Drop in vault end\n";
     Sleep(500);
@@ -143,7 +144,7 @@ void DropMode::LootingCrete(std::string& current_tp_name, bool take) {
         TakeAll(settings_.take_all);
     }
     if (take == false) {
-        GiveAll(settings_.give_all);
+        GiveAll();
     }
     CloseInventory(settings_.close_invetory);
 

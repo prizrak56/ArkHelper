@@ -96,11 +96,11 @@ void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_count
 
         bool is_kill_or_destroyed_detected = SplitIntoWordsAndFindWord(newStringProc);
 
-        if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration) {
+        if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration && is_kill_or_destroyed_detected == true) {
             SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
         }
         else if (not_everyone_timer_duration >= not_everyone_time_counter) {
-            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,is_kill_or_destroyed_detected);
+            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,false);
         }
 
         while (mode_selection.second == Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {

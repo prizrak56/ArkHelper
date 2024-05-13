@@ -25,7 +25,7 @@ private:
 	void MouseUp();
 	void MoveTo360();
 	void TakeAll(Point take_all);
-	void GiveAll(Point give_all);
+	//void GiveAll();
 	void CloseInventory(Point close_invetory);
 	void LootingCrete(std::string& current_tp_name, bool take);
 
@@ -34,7 +34,7 @@ private:
 	void EditTpName();
 
 public:
-
+	void GiveAll();
 	void EditSettings();
 
 	DropMode(std::string& settings_path);
