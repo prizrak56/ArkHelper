@@ -90,6 +90,7 @@ void DropMode::MoveTo360() {
 }
 
 void DropMode::TakeAll(Point take_all) {
+    Sleep(500);
     std::cout << "Take all start"s << std::endl;
     SetCursorPos(take_all.x, take_all.y);   // take everything
     //mouse_click();
@@ -99,6 +100,7 @@ void DropMode::TakeAll(Point take_all) {
 }
 
 void DropMode::GiveAll(Point give_all) {
+    Sleep(500);
     std::cout << "Drop in vault start"s << std::endl;
     SetCursorPos(give_all.x, give_all.y);    // put everything
     left_button_.Click();
@@ -107,6 +109,7 @@ void DropMode::GiveAll(Point give_all) {
 }
 
 void DropMode::CloseInventory(Point close_invetory) {
+    Sleep(500);
     std::cout << "Close inventory start"s << std::endl;
     SetCursorPos(close_invetory.x, close_invetory.y);
     left_button_.Click();
@@ -278,7 +281,7 @@ void DropMode::EditCoords() {
     lines[17] = "first_tp_name_in_list: "s + std::to_string(settings_.first_tp_name_in_list.x) + ", "s + std::to_string(settings_.first_tp_name_in_list.y);
     lines[18] = "teleporting: "s + std::to_string(settings_.teleporting.x) + ", "s + std::to_string(settings_.teleporting.y);
     lines[19] = "take_all: "s + std::to_string(settings_.take_all.x) + ", "s + std::to_string(settings_.take_all.y);
-    lines[20] = "give_all: "s + std::to_string(settings_.give_all.x) + ", "s + std::to_string(settings_.search_window.y);
+    lines[20] = "give_all: "s + std::to_string(settings_.give_all.x) + ", "s + std::to_string(settings_.give_all.y);
     lines[21] = "close_inventory: "s + std::to_string(settings_.close_invetory.x) + ", "s + std::to_string(settings_.close_invetory.y);
 
     std::ofstream out;

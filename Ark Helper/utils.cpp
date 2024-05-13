@@ -243,16 +243,34 @@ void ObServerSelectingModeFromTheFirstPage(){
 		if (!GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F1)) {
 			Beep(500, 400);
 			EnableDisableFunc(Command::LEFT_CLICK);
+			while (mode_selection.first == Command::LEFT_CLICK) {
+				if (GetAsyncKeyState(VK_F1)) {
+					EnableDisableFunc(Command::NONE);
+				}
+				Sleep(100);
+			}
 			Sleep(500);
 		}
 		if (!GetAsyncKeyState(VK_RBUTTON) && GetAsyncKeyState(VK_F2)) {
 			Beep(1000, 400);
 			EnableDisableFunc(Command::RIGHT_CLICK);
+			while (mode_selection.first == Command::RIGHT_CLICK) {
+				if (GetAsyncKeyState(VK_F2)) {
+					EnableDisableFunc(Command::NONE);
+				}
+				Sleep(100);
+			}
 			Sleep(500);
 		}
 		if (GetAsyncKeyState(VK_F3)) {
 			Beep(1500, 400);
 			EnableDisableFunc(Command::SPACE_CLICK);
+			while (mode_selection.first == Command::SPACE_CLICK) {
+				if (GetAsyncKeyState(VK_F3)) {
+					EnableDisableFunc(Command::NONE);
+				}
+				Sleep(100);
+			}
 			Sleep(500);
 		}
 		if (GetAsyncKeyState(VK_F4)) {

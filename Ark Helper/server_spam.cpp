@@ -143,11 +143,11 @@ void ServerSpam::JoinToServer() {
     Sleep(5000);
     SetCursorPos(settings_.join_to_server_mode.x, settings_.join_to_server_mode.y);
     left_button_.Click();
-    Sleep(45000);
+    Sleep(30000);
 }
 
 void ServerSpam::CreateToPeople() {
-    Sleep(5000);
+    Sleep(1000);
     SetCursorPos(settings_.create_ppl.x, settings_.create_ppl.y);
     Sleep(200);
     left_button_.Click();
@@ -391,7 +391,7 @@ void ServerSpam::SpamStart() {
             JoinToServer();
 
             std::cout << "CreateToPeople();"s << std::endl;
-            Sleep(4000);
+            Sleep(2000);
             CreateToPeople();
 
             std::cout << "EnterText();"s << std::endl;
