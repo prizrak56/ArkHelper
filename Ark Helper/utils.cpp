@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 
 using namespace std::literals;
 
@@ -388,23 +387,15 @@ void SimulateKeyPress(WORD keyCode) {
 	SendInput(1, &input, sizeof(INPUT));
 }
 
-void CheckFileSettings(std::string& path) {
-	if (FileExists(path)) {
+void CheckFileSettings(const std::filesystem::path& path) {
+
+	if (!std::filesystem::exists(path)) {
 		return;
 	}
-	auto pos = path.find_last_of('\\');
+	std::filesystem::create_directories(path.parent_path());
 
-	if (pos == std::string::npos) {
-		return;
-	}
+	std::ofstream out(path, std::ios::out);
 
-	std::string directory = path.substr(0, pos);
-	if (!FileExists(directory)) {
-		std::filesystem::create_directory(directory);
-	}
-
-	std::ofstream out;
-	out.open(path);
 	if (!out.is_open()) {
 		std::cout << "settings file was not created or opened"s << std::endl;
 		return;
@@ -449,7 +440,9 @@ void CheckFileSettings(std::string& path) {
 		out << "drop_all: 0, 0"s << std::endl;
 		out << "search_window: 0, 0"s << std::endl << std::endl;
 	}
+
 	out.close();
+
 }
 
 void GetSetCursorPosition(int& x, int& y) {
@@ -477,14 +470,14 @@ void GetSetCursorPosition(int& x, int& y) {
 	delete p_cursor_pos;
 }
 
-void EditWebhook(std::string& path) {
+void EditWebhook(const std::filesystem::path& path) {
 
 	std::string webhook;
 	std::cout << "Enter webhook: "s;
 	std::getline(std::cin, webhook);
 
-	std::ifstream input;
-	input.open(path);
+	std::ifstream input(path);
+
 	if (!input.is_open()) {
 		std::cout << "Couldn't open the file: "s << path << std::endl;
 		return;

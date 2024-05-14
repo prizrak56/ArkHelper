@@ -1,6 +1,3 @@
-#include <iostream>
-
-#include "string_processing.h"
 #include "clicker.h"
 
 Clicker::Clicker(HWND h_windows_handle) : h_windows_handle_(h_windows_handle) {}

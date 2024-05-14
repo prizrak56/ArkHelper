@@ -4,6 +4,8 @@
 #include "utils.h"
 #include "clicker.h"
 
+
+
 class DropMode {
 private:
 
@@ -36,7 +38,7 @@ private:
 public:
 
 	void EditSettings();
-	DropMode(std::string& settings_path);
+	DropMode(const std::filesystem::path& settings_path);
 	void StartLooting();
 
 private:
@@ -49,6 +51,6 @@ private:
 
 	LeftMouseClicker left_button_;
 
-	std::string path_settings_ = "C:\\ArkHelper\\settings.txt";
+	std::filesystem::path path_settings_ = "C:\\"_p / "ArkHelper"_p / "settings.txt"_p;
 
 };

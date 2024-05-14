@@ -1,5 +1,6 @@
 #include <thread>
 #include <iostream>
+#include <filesystem>
 
 #include "utils.h"
 #include "clicker.h"
@@ -14,10 +15,13 @@ using namespace std::literals;
 
 int main() {
 
-	std::string settings_path = "C:\\ArkHelper\\settings.txt";
 
-	auto pos = settings_path.find_last_of('\\');
-	std::string directory = settings_path.substr(0, pos);
+	std::filesystem::path settings_path("C:\\"_p / "ArkHelper"_p / "settings.txt"_p);
+
+	//std::string settings_path = "C:\\ArkHelper\\settings.txt";
+
+	/*auto pos = settings_path.find_last_of('\\');
+	std::string directory = settings_path.substr(0, pos);*/
 
 	CheckFileSettings(settings_path);
 
@@ -36,7 +40,7 @@ int main() {
 
 	FarmMode farm(h_window_handle);
 
-	LogMode log(directory);
+	LogMode log(settings_path.parent_path());
 
 	ServerSpam spam(settings_path);
 

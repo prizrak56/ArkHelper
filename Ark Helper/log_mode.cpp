@@ -8,7 +8,7 @@
 
 using namespace std::literals;
 
-LogMode::LogMode(std::string& image_save_path) : image_save_path_(image_save_path + "\\log.png") {}
+LogMode::LogMode(const std::filesystem::path& image_save_path) : image_save_path_(image_save_path / "log.png"_p) {}
 
 void LogMode::ChooseOptionsAndStart() {
     system("CLS");
@@ -86,10 +86,10 @@ void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_count
         system("cls");
         std::cout << "F2 - disable\n";
         if (screen_resolution != ScreenResolution::FULL_SCREEN) {
-            CaptureScreen(image_save_path_.c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
+            CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
         }
         else {
-            CaptureScreen(image_save_path_.c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
+            CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
         }
 
         std::string newStringProc = ReadImage(image_save_path_);
