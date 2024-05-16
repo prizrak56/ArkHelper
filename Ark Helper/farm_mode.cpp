@@ -138,7 +138,7 @@ namespace farm {
         while (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
             system("cls");
 
-            std::cout << "F1 - Start\n\n"s;
+            std::cout << "F1 - Start"s << std::endl << std::endl;
             std::cout << "Seconds: "s << first_timer << std::endl;
             std::cout << "Throw away."s << std::endl;
             std::cout << std::boolalpha << "F2 - Flint "s << b_flint_ << std::endl;

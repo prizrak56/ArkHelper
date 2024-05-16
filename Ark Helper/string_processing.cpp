@@ -96,18 +96,14 @@ std::string ConvertLPCWSTRToString(LPCWSTR lpcwsz_str) noexcept{
     return str;
 }
 
-Point ParseCoords(std::string str) {
-    int x = 0;
-    int y = 0;
+Point ParseCoords(std::string_view str) {
+    auto x_pos = str.find_first_of(':');
+    auto y_pos = str.find_first_of(',');
 
-    auto pos = str.find_first_of(':');
-    str = str.substr(pos + 1, str.length());
+    std::string x = std::move(std::string(str.substr(x_pos + 2, y_pos - x_pos - 2)));
+    std::string y = std::move(std::string(str.substr(y_pos + 2, str.length() - y_pos - 2)));
 
-    pos = str.find_first_of(',');
-    x = std::stoi(str.substr(0, pos));
-    y = std::stoi(str.substr(pos + 1, str.length()));
-
-    return { x, y };
+    return { std::stoi(x), std::stoi(y) };
 }
 
 std::vector<std::string> ParseName(std::string& str) {

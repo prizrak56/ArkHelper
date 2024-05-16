@@ -99,7 +99,7 @@ const std::filesystem::path DiscordWebhook::GetWebHookUrl() const{
     return webhook_path_;
 }
 
-void DiscordWebhook::SendText(const std::filesystem::path& message) {
-    std::string command = cmd_1_for_text_message_ + message.string() + cmd_2_for_text_message_ + GetWebHookUrl().string();
+void DiscordWebhook::SendText(const std::string& message) {
+    std::string command = cmd_1_for_text_message_ + message + cmd_2_for_text_message_ + GetWebHookUrl().string();
     system_no_output(command.c_str());
 }

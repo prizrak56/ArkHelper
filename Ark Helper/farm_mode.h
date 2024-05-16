@@ -1,9 +1,12 @@
 #pragma once
 
+#include <cstddef>
 #include <filesystem>
 #include <string>
 #include <string_view>
 #include <Windows.h>
+
+#include "utils.h"
 
 namespace farm {
 // ----------------------------------- [Farm Mode] Definition -------------------------

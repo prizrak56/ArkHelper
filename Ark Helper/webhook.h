@@ -22,7 +22,7 @@ public:
 
 	const std::filesystem::path GetWebHookUrl() const;
 
-	void SendText(const std::filesystem::path& message);
+	void SendText(const std::string& message);
 
 private:
 

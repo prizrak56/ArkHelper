@@ -6,7 +6,6 @@
 
 #include "drop_mode.h"
 #include "string_processing.h"
-#include "utils.h"
 
 namespace farm {
     using namespace std::literals;
@@ -34,7 +33,7 @@ namespace farm {
     }
 
     void DropMode::ClickOnSearchBox() {
-        std::cout << "Clicking on the search box, start" << std::endl;
+        std::cout << "Clicking on the search box, start"s << std::endl;
         SetCursorPos(settings_.search_window.x, settings_.search_window.y);
         Sleep(500);
         left_button_.Click();
@@ -53,7 +52,7 @@ namespace farm {
     }
 
     void DropMode::ClickToTeleporting() {
-        std::cout << "Teleporting, start" << std::endl;
+        std::cout << "Teleporting, start"s << std::endl;
         SetCursorPos(settings_.teleporting.x, settings_.teleporting.y);
         Sleep(500);
         left_button_.Click();
@@ -98,7 +97,7 @@ namespace farm {
         std::cout << "NOTE: All letters should be in the UPPER case."s << std::endl;
 
         std::cout << "Example:\nDROP\nDROP1\nDROP 2\nDROP SAVE\netc."s << std::endl << std::endl;
-        std::cout << "\n\nIndicate the quantity of teleports (1, 2, 3, 4 ..... N)."s << std::endl;
+        std::cout << std::endl << std::endl <<"Indicate the quantity of teleports (1, 2, 3, 4 ..... N)."s << std::endl;
 
         std::vector<std::string> teleport_name = std::move(RequestUserTPNames());
         std::vector<std::string> settings = std::move(MergeTeleportNames(teleport_name)); // to change
@@ -139,7 +138,7 @@ namespace farm {
 
         Sleep(200);
         left_button_.Click();
-        std::cout << "Putting into the vault, end\n";
+        std::cout << "Putting into the vault, end"s << std::endl;
         Sleep(500);
     }
 
@@ -437,9 +436,12 @@ namespace farm {
             if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
 
                 if (teleports_name_.size() == 0) {
-                    std::cout << "TP name was not found.\n\nSleep 10s"s;
+                    std::cout << "TP name was not found."s;
+                    std::cout << std::endl << std::endl << "Sleep 10s"s;
+
                     Sleep(10000);
                     system("cls");
+
                     std::cout << "F1 - start"s << std::endl;
                     std::cout << "F2 - set coords"s << std::endl;
                     std::cout << "F3 - set teleport name"s << std::endl;
@@ -460,7 +462,7 @@ namespace farm {
                         Sleep(5000);
                         system("cls");
                         std::cin.clear();
-                        std::cout << "Next TP\n";
+                        std::cout << "Next TP"s << std::endl;
                     }
 
                     Sleep(500);

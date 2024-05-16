@@ -1,11 +1,13 @@
 #pragma once
 
+#include <cstddef>
 #include <span>
 #include <string>
 #include <string_view>
 #include <vector>
 
 #include "clicker.h"
+#include "utils.h"
 
 namespace farm {
 // ----------------------------------- [Drop Mode] Definition -------------------------

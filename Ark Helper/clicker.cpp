@@ -8,7 +8,7 @@ namespace clicker {
 
 	Clicker::Clicker(HWND h_windows_handle) noexcept : h_windows_handle_(h_windows_handle) {}
 
-	size_t Clicker::GetDelay() const noexcept {
+	std::size_t Clicker::GetDelay() const noexcept {
 		return delay_;
 	}
 
@@ -16,7 +16,7 @@ namespace clicker {
 		return h_windows_handle_;
 	}
 
-	void Clicker::SetDelay(size_t delay) noexcept {
+	void Clicker::SetDelay(std::size_t delay) noexcept {
 		delay_ = delay;
 	}
 

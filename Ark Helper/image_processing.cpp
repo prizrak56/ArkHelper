@@ -1,11 +1,12 @@
 #include <cstdio> // for the FILE type
 #include <iostream>
+
 #include <leptonica/allheaders.h> // for reading image
 #include <tesseract/baseapi.h> // for reading image
 
 #include "image_processing.h"
 
-namespace image_processing {
+namespace processing {
     using namespace std::literals;
 
     // [RU] Читаем текст и изображения
@@ -110,4 +111,4 @@ namespace image_processing {
         DeleteObject(h_capture_bitmap);
         ReleaseDC(h_desktop_wnd, h_desktop_dc);
     }
-} // namespace image_processing
+} // namespace processing
