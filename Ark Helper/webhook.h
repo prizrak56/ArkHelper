@@ -3,9 +3,7 @@
 
 #include "image_processing.h"
 
-std::filesystem::path operator""_p(const char* ch, std::size_t size) {
-	return std::filesystem::path(ch, ch + size);
-}
+std::filesystem::path operator""_p(const char* ch, std::size_t size);
 
 class DiscordWebhook {
 

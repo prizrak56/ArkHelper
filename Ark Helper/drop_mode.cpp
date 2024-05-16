@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <utility>
+#include <stdexcept>
 
 #include "drop_mode.h"
 #include "string_processing.h"
@@ -76,8 +77,7 @@ namespace farm {
         std::ofstream out(path_settings_, std::ios::out);
 
         if (!out.is_open()) {
-            std::cout << "The file wasn't opened: "s << path_settings_ << std::endl;
-            return;
+            throw std::invalid_argument("The file wasn't opened: "s + path_settings_.string());
         }
 
         for (const auto& setting : settings) {
@@ -220,14 +220,14 @@ namespace farm {
 
     void DropMode::MoveTo360() const {
 
-        std::cout << "360° with E, start"s << std::endl;
+        std::cout << "360 with E, start"s << std::endl;
         for (int i = 0; i < 380; i++) {
             mouse_event(MOUSEEVENTF_MOVE, -10, 0, 0, 0);
             SimulateKeyPress('E');
             Sleep(20);
         }
 
-        std::cout << "360° with E, end"s << std::endl;
+        std::cout << "360 with E, end"s << std::endl;
         Sleep(200);
     }
 
@@ -309,8 +309,7 @@ namespace farm {
         std::ifstream input(path_settings_, std::ios::in);
 
         if (!input.is_open()) {
-            std::cout << "Settings were not saved or a file was not opened: "s << path_settings_ << std::endl;
-            return;
+            throw std::invalid_argument("Settings were not saved or a file was not opened: "s + path_settings_.string());
         }
 
         std::string line;

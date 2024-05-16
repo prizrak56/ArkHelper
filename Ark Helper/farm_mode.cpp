@@ -1,25 +1,26 @@
 #include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
+
 #include "farm_mode.h"
 #include "string_processing.h"
-#include "utils.h"
 
 namespace farm {
 // ---------------------------------- [Farm Mode] Realization -------------------------
 //                                                                                    +
-//                                                                                    + ---------------------------
-// ------------------------------------------------------------------------------------ Constuctors & Auxiliaries +
+//                                                                                    + -------------
+// ------------------------------------------------------------------------------------ Constuctors +
 
     FarmMode::FarmMode(HWND h_window_handle) : h_window_handle_(h_window_handle) {}
     FarmMode::FarmMode(const std::filesystem::path& file_with_setting, HWND& h_window_handle) : path_settings_(file_with_setting), h_window_handle_(h_window_handle) {}
 
-    std::filesystem::path operator""_p(const char* ch, std::size_t size) {
-        return std::filesystem::path(ch, ch + size);
-    }
+    /*std::filesystem::path operator""_p(const char* ch, std::size_t size) {
+        return std::filesystem::path(ch, ch + size);                                    ERROR
+    }*/
 
 // 
 // 
@@ -40,8 +41,7 @@ namespace farm {
         std::ifstream input(path_settings_, std::ios::in);
 
         if (!input.is_open()) {
-            std::cout << "The file was not created or opened: "s << path_settings_ << std::endl;
-            return;
+            throw std::invalid_argument("The file was not created or opened: "s + path_settings_.string());
         }
 
         std::string line;
@@ -257,8 +257,7 @@ namespace farm {
         std::ifstream input(path_settings_, std::ios::in);
 
         if (!input.is_open()) {
-            std::cout << "The file was not created or opened: "s << path_settings_ << std::endl;
-            return;
+            throw std::invalid_argument("The file was not created or opened: "s + path_settings_.string());
         }
 
         std::vector<std::string> lines;

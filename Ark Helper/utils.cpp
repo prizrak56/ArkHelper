@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <stdexcept>
 
 using namespace std::literals;
 
@@ -388,16 +389,15 @@ void SimulateKeyPress(WORD keyCode) {
 	SendInput(1, &input, sizeof(INPUT));
 }
 
-void CheckFileSettings(const std::filesystem::path& path) { // accepted
-	if (!std::filesystem::exists(path)) {
+void CheckFileSettings(const std::filesystem::path& path) {
+	if (std::filesystem::exists(path)) {
 		return;
 	}
 	std::filesystem::create_directories(path.parent_path());
 
 	std::ofstream out(path, std::ios::out);
 	if (!out.is_open()) {
-		std::cout << "settings file was not created or opened"s << std::endl;
-		return;
+		throw std::invalid_argument("Settings file was not created or opened: "s + path.string());
 	}
 
 	{
@@ -511,8 +511,7 @@ std::vector<std::string> ReadSettings(const std::filesystem::path& path_settings
 	std::ifstream input(path_settings, std::ios::in);
 
 	if (!input.is_open()) {
-		std::cout << path_settings << " file was not created or opened"s << std::endl;
-		return;
+		throw std::invalid_argument("File wasn't opened: "s + path_settings.string());
 	}
 
 	std::vector<std::string> settings;

@@ -12,6 +12,6 @@ void MenuMessage2() noexcept;
 
 std::string ConvertLPCWSTRToString(LPCWSTR lpcwszStr) noexcept;
 
-Point ParseCoords(std::string str);
+Point ParseCoords(std::string_view str);
 
 std::vector<std::string> ParseName(std::string& str);

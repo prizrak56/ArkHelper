@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 
 #include "image_processing.h"
 #include "log_mode.h"
@@ -47,20 +48,22 @@ namespace processing {
         auto not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
 
         while (mode_selection.second == Command::START) {
+
             system("cls");
             std::cout << "F2 - disable"s << std::endl;
+            std::string image_path = image_save_path_.string();
 
             if (screen_resolution != ScreenResolution::FULL_SCREEN) {
-                CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
+                CaptureScreen(image_path.c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
             }
             else {
-                CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
+                CaptureScreen(image_path.c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
             }
 
             std::string newStringProc = ReadImage(image_save_path_);
             bool is_kill_or_destroyed_detected = SplitIntoWordsAndFindWord(newStringProc);
 
-            if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration && is_kill_or_destroyed_detected == true) {
+            if (everyone_time_counter <= everyone_timer_duration && is_kill_or_destroyed_detected == true) {
                 SendDiscordMessageAndRestartTimer(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
             }
             else if (not_everyone_timer_duration >= not_everyone_time_counter) {
@@ -137,11 +140,11 @@ namespace processing {
         int width = 0;
         int height = 0;
 
-        std::cout 
+        std::cout
             << "F1 - Start 1920x1080"s << std::endl
-            << "F2 - Start 2560x1440"s << std::endl 
-            << "F3 - Start 2048x1080 (not tested)"s << std::endl 
-            << "F4 = Start 3840x2160 (not tested)"s << std::endl 
+            << "F2 - Start 2560x1440"s << std::endl
+            << "F3 - Start 2048x1080 (not tested)"s << std::endl
+            << "F4 = Start 3840x2160 (not tested)"s << std::endl
             << "F5 - Start FullScreen (there may be false triggers)"s << std::endl;
 
         mode_selection.second = Command::SELECT_SETTINGS;
@@ -173,12 +176,68 @@ namespace processing {
                 Beep(500, 800);
                 EditScreenSettings(1, 1, 0, 0);
                 break;
-
             }
-
-            Sleep(20);
+            Sleep(200);
         }
-
         NoticeUser(everyone_time_counter, not_everyone_time_counter);
     }
+
+//<<<<<<< Updated upstream
+//=======
+//void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_counter) {
+//
+//    DiscordWebhook discord_webhook;
+//
+//    discord_webhook.SendText("Start...");
+//
+//    //timer 1
+//    auto everyone_timer_start = std::chrono::steady_clock::now();
+//    auto everyone_timer_end = std::chrono::steady_clock::now();
+//    auto everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(everyone_timer_end - everyone_timer_start).count();
+//
+//    //timer 2
+//    auto not_everyone_timer_start = std::chrono::steady_clock::now();
+//    auto not_everyone_timer_end = std::chrono::steady_clock::now();
+//    auto not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
+//
+//    while (mode_selection.second == Command::START) {
+//
+//        system("cls");
+//        std::cout << "F2 - disable\n";
+//        if (screen_resolution != ScreenResolution::FULL_SCREEN) {
+//            image_processing::CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
+//        }
+//        else {
+//            image_processing::CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
+//        }
+//
+//        std::string newStringProc = image_processing::ReadImage(image_save_path_);
+//
+//        bool is_kill_or_destroyed_detected = SplitIntoWordsAndFindWord(newStringProc);
+//
+//        if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration && is_kill_or_destroyed_detected == true) {
+//            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
+//        }
+//        else if (not_everyone_timer_duration >= not_everyone_time_counter) {
+//            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,false);
+//        }
+//
+//        while (mode_selection.second == Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {
+//
+//            everyone_timer_end = std::chrono::steady_clock::now();
+//            everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(everyone_timer_end - everyone_timer_start).count();
+//
+//            not_everyone_timer_end = std::chrono::steady_clock::now();
+//            not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
+//
+//            if (mode_selection.first == Command::NONE && mode_selection.second == Command::NONE) {
+//                break;
+//>>>>>>> Stashed changes
+//            }
+//
+//            Sleep(20);
+//        }
+//
+//        NoticeUser(everyone_time_counter, not_everyone_time_counter);
+//    }
 } // namespace processing

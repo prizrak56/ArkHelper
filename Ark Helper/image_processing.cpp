@@ -1,5 +1,6 @@
 #include <cstdio> // for the FILE type
 #include <iostream>
+#include <stdexcept>
 
 #include <leptonica/allheaders.h> // for reading image
 #include <tesseract/baseapi.h> // for reading image
@@ -78,11 +79,10 @@ namespace processing {
         // [EN] Opening the file to save the screenshot
         FILE* file;
         if (fopen_s(&file, save_path, "wb") != 0) {
-            std::cerr << "Ошибка: Невозможно открыть файл для сохранения скриншота.\nError: The file to save the screenshot cannot be opened."s << std::endl;
             DeleteDC(h_capture_dc);
             DeleteObject(h_capture_bitmap);
             ReleaseDC(h_desktop_wnd, h_desktop_dc);
-            return;
+            throw std::invalid_argument("Error: The file to save the screenshot cannot be opened."s + save_path);
         }
 
         // [RU] Записываем заголовок файла BMP

@@ -73,4 +73,78 @@ namespace spam {
 
 		static std::vector<std::wstring> process_names_;
 	};
+//<<<<<<< Updated upstream
 } // namespace spam
+
+
+
+
+//=======
+//
+//	//void GetSetCursorPosition(int& x, int& y);
+//
+//	void EnterText();
+//
+//	void SimulateCtrlV();
+//
+//	void PressToStart();
+//
+//	void SearchServer();
+//
+//	void RefreshServer();
+//
+//	void JoinToServer();
+//
+//	void CreateToPeople();
+//
+//	void ServerBackBack();
+//
+//	void ServerLeave();
+//
+//	static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
+//
+//	void ConverterWstringToString();
+//
+//	void FindCrashProcess();
+//
+//	void OpenSearchMenu();
+//
+//	void ApplyOrInitializeSettingsFromFile();
+//
+//	void SetSettings();
+//
+//public:
+//
+//	void GetSetButtonPosition();
+//
+//	ServerSpam() = default;
+//
+//	ServerSpam(const std::filesystem::path& file_settings_path);
+//
+//	ServerSpam(const std::filesystem::path& file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
+//
+//	void SpamStart();
+//
+//private:
+//	
+//	int server_number_ = 0;
+//
+//	int last_server_number_ = 9200;
+//
+//	clicker::LeftMouseClicker left_button_;
+//
+//	SpamCoordsPosSetting settings_;
+//
+//	static std::vector<std::wstring> process_names_;
+//
+//	bool crash_on_ = false;
+//
+//	std::string name_of_the_game_to_search_in_case_of_crash_ = "ARK SURVIVAL ASCENDED";
+//
+//	LPCWSTR name_of_the_game_for_crash_process_ = L"ArkAscended"; //  for search game in search menu windows
+//
+//	std::filesystem::path file_setting_ = "C:\\"_p / "ArkHelper"_p / "settings.txt"_p;
+//
+//}; // class ServerSpam
+
+//>>>>>>> Stashed changes

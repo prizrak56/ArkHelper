@@ -30,8 +30,8 @@ int main() {
 	clicker::SpaceButtonClicker space_click(h_window_handle);
 
 	farm::FarmMode farm(h_window_handle);
-	LogMode log(settings_path.parent_path());
-	ServerSpam spam(settings_path);
+	processing::LogMode log(settings_path.parent_path());
+	spam::ServerSpam spam(settings_path);
 	farm::DropMode looting_drop(settings_path);
 
 	size_t delay = 0;
@@ -57,7 +57,7 @@ int main() {
 
 		case Command::LEFT_CLICK:
 			if (h_window_handle != NULL) {
-				left_click.PressingKeyUntilHotKeyIsInputed(is_enable);
+				left_click.PressKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else { 
 				EnableDisableFunc(Command::NONE);
@@ -67,7 +67,7 @@ int main() {
 
 		case Command::RIGHT_CLICK:
 			if (h_window_handle != NULL) {
-				right_click.PressingKeyUntilHotKeyIsInputed(is_enable);
+				right_click.PressKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else { 
 				EnableDisableFunc(Command::NONE);
@@ -77,7 +77,7 @@ int main() {
 
 		case Command::SPACE_CLICK:
 			if (h_window_handle != NULL) {
-				space_click.PressingKeyUntilHotKeyIsInputed(is_enable);
+				space_click.PressKeyUntilHotKeyIsInputed(is_enable);
 			}
 			else {
 				EnableDisableFunc(Command::NONE);
@@ -104,7 +104,7 @@ int main() {
 			break;
 
 		case Command::FARM_MODE:
-			farm.FarmStart();
+			farm.StartFarm();
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
 			break;
@@ -179,8 +179,6 @@ int main() {
 			Sleep(200);
 			break;
 		}
-		
-		
 		Sleep(20);
 	}
 }

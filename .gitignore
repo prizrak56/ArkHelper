@@ -36,7 +36,4 @@ directory, not subdir/x64
 *.app
 Ark Helper/x64/Debug/vcpkg.applocal.log
 /Ark Helper/x64
-Ark Helper/Ark Helper.vcxproj
-Ark Helper/Ark Helper.vcxproj.filters
-Ark Helper/Ark Helper.vcxproj.user
 /.vs

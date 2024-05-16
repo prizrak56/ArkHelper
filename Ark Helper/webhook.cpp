@@ -7,6 +7,10 @@
 
 using namespace std::literals;
 
+std::filesystem::path operator""_p(const char* ch, std::size_t size) {
+    return std::filesystem::path(ch, ch + size);
+}
+
 void DiscordWebhook::SetWebhook() {
 
     std::ifstream input;
@@ -39,7 +43,7 @@ DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook
 
 void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::filesystem::path& image_path){
 
-    HBITMAP h_bitmap = CaptureScreenshotForWebhook(x, y, width, height);
+    HBITMAP h_bitmap = processing::CaptureScreenshotForWebhook(x, y, width, height);
     std::vector<BYTE> buf;
     IStream* stream = NULL;
     HRESULT hr = CreateStreamOnHGlobal(0, TRUE, &stream);
