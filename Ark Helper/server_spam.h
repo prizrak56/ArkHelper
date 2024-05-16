@@ -23,6 +23,8 @@ private:
 		Point exit_to_main_menu = { 953,628 };
 	};
 
+	//void GetSetCursorPosition(int& x, int& y);
+
 	void EnterText();
 
 	void SimulateCtrlV();
@@ -68,8 +70,6 @@ public:
 private:
 	
 	int server_number_ = 0;
-
-	int start_server_number_ = 0;
 
 	int last_server_number_ = 9200;
 

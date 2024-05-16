@@ -14,24 +14,24 @@ class LogMode {
 		int height_full = GetSystemMetrics(SM_CYSCREEN);
 	};
 
-	void EditScreenSettings(int x, int y, int width, int height);
-
-	void NoticeUser(int& everyone_time_counter, int& not_everyone_time_counter);
-
-	void SendDiscordMessageAndRestartTimerCustomPosScreenResolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone);
-
 public:
 
 	LogMode() = default;
 
 	LogMode(std::string& image_save_path);
 
-	void ChooseOptionsAndStart();
+	void ChooseOptions();
 
 private:
 
 	std::string image_save_path_ = "C:\\ArkHelper\\log.png";
 
 	CoordsScreenResolution screen_coords_;
+
+	void EditScreenSettings(int x, int y, int width, int height);
+
+	void NoticeUser(int& everyone_time_counter, int& not_everyone_time_counter);
+
+	void SendDiscordMessageAndRestartTimerCustomPosScreenResolution(DiscordWebhook& discord_webhook, std::chrono::steady_clock::time_point& reset_timer_start, int& reset_timer_duration, bool is_everyone);
 
 }; // class LogMode

@@ -7,7 +7,7 @@
 
 using namespace std::literals;
 
-void DiscordWebhook::SetWebhook() {
+DiscordWebhook::DiscordWebhook() {
 
     std::ifstream input;
     input.open(webhook_path_);
@@ -15,10 +15,11 @@ void DiscordWebhook::SetWebhook() {
         std::cout << webhook_path_ << " file was not created or opened"s << std::endl;
         return;
     }
+    
     std::string line;
     std::size_t counter = 0;
     while (std::getline(input, line)) {
-
+        
         if (counter == 1) {
             webhook_path_ = line;
             input.close();
@@ -29,13 +30,7 @@ void DiscordWebhook::SetWebhook() {
     input.close();
 }
 
-DiscordWebhook::DiscordWebhook() {
-    SetWebhook();
-}
-
-DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook_path) {
-    SetWebhook();
-}
+DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook_path) {}
 
 void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::string& image_path){
 
@@ -103,3 +98,4 @@ void DiscordWebhook::SendText(std::string message) {
     std::string command = cmd_1_for_text_message_ + message + cmd_2_for_text_message_ + GetWebHookUrl();
     system_no_output(command.c_str());
 }
+

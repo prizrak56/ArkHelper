@@ -106,7 +106,7 @@ int main() {
 			break;
 
 		case Command::LOG_MODE:
-			log.ChooseOptionsAndStart();
+			log.ChooseOptions();
 			mode_selection.first = Command::NONE;
 			mode_selection.second = Command::NONE;
 			break;

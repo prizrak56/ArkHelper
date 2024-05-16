@@ -2,9 +2,6 @@
 #include "image_processing.h"
 
 class DiscordWebhook {
-
-	void SetWebhook();
-
 public:
 
 	DiscordWebhook();

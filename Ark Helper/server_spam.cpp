@@ -251,7 +251,7 @@ void ServerSpam::ApplyOrInitializeSettingsFromFile() {
     SetSettings();
 }
 
-void ServerSpam::GetSetButtonPosition() {
+void ServerSpam::GetSetButtonPosition(){
 
     system("cls");
 
@@ -362,13 +362,11 @@ void ServerSpam::SpamStart() {
     }
     std::cout << "Enter server number to get started: "s;
     std::cin >> server_number_;
-    start_server_number_ = server_number_;
-    last_server_number_ = server_number_ + 200;
     std::cout << "Prees F1 - to get start"s << std::endl;
 
     HWND console_window = GetConsoleWindow();
 
-    // Setting Console Window Sizes
+    // Установка размеров окна консоли
     int width = 200;
     int height = 400;
     SetWindowPos(console_window, HWND_TOPMOST, 0, 0, width, height, SWP_SHOWWINDOW);
@@ -423,7 +421,7 @@ void ServerSpam::SpamStart() {
 
             // max server number
             if (server_number_ >= last_server_number_) {
-                server_number_ = start_server_number_;
+                server_number_ = 9000;
             }
             Sleep(100);
         }

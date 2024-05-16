@@ -10,7 +10,7 @@ using namespace std::literals;
 
 LogMode::LogMode(std::string& image_save_path) : image_save_path_(image_save_path + "\\log.png") {}
 
-void LogMode::ChooseOptionsAndStart() {
+void LogMode::ChooseOptions() {
     system("CLS");
 
     // the everytime variable is responsible for the minutes after which the image will be sent to discord if the keywords were found (kill or destroyed)
