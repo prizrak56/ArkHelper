@@ -1,24 +1,21 @@
-#include <thread>
+#include <filesystem>
 #include <iostream>
+#include <thread>
 
-#include "utils.h"
 #include "clicker.h"
-#include "log_mode.h"
-#include "string_processing.h"
-#include "log_mode.h"
-#include "farm_mode.h"
-#include "server_spam.h"
 #include "drop_mode.h"
+#include "farm_mode.h"
+#include "log_mode.h"
+#include "server_spam.h"
+#include "string_processing.h"
+#include "utils.h"
 
 using namespace std::literals;
 
 int main() {
+	// throw when cout when the error occurs
 
-	std::string settings_path = "C:\\ArkHelper\\settings.txt";
-
-	auto pos = settings_path.find_last_of('\\');
-	std::string directory = settings_path.substr(0, pos);
-
+	std::filesystem::path settings_path("C:\\"_p / "ArkHelper"_p / "settings.txt"_p);
 	CheckFileSettings(settings_path);
 
 	SetConsoleTitle(L"prizrak_p");
@@ -28,19 +25,14 @@ int main() {
 	const LPCWSTR target_window_Name = L"ArkAscended";
 	HWND h_window_handle = FindWindow(NULL, target_window_Name);
 
-	LeftMouseClicker left_click(h_window_handle);
+	clicker::LeftMouseClicker left_click(h_window_handle);
+	clicker::RightMouseClicker right_click(h_window_handle);
+	clicker::SpaceButtonClicker space_click(h_window_handle);
 
-	RightMouseClicker right_click(h_window_handle);
-
-	SpaceButtonClicker space_click(h_window_handle);
-
-	FarmMode farm(h_window_handle);
-
-	LogMode log(directory);
-
+	farm::FarmMode farm(h_window_handle);
+	LogMode log(settings_path.parent_path());
 	ServerSpam spam(settings_path);
-
-	DropMode looting_drop(settings_path);
+	farm::DropMode looting_drop(settings_path);
 
 	size_t delay = 0;
 

@@ -10,9 +10,9 @@
 
 using namespace std::literals;
 
-ServerSpam::ServerSpam(std::string file_settings_path) : file_setting_(file_settings_path) {}
+ServerSpam::ServerSpam(const std::filesystem::path& file_settings_path) : file_setting_(file_settings_path) {}
 
-ServerSpam::ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run) :
+ServerSpam::ServerSpam(const std::filesystem::path& file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run) :
     file_setting_(file_settings_path), name_of_the_game_for_crash_process_(lp_process_name), name_of_the_game_to_search_in_case_of_crash_(name_of_the_process_to_run){}
 
 void ServerSpam::SetSettings(){
@@ -245,7 +245,7 @@ void ServerSpam::OpenSearchMenu() {
 
 void ServerSpam::ApplyOrInitializeSettingsFromFile() {
 
-    if (!FileExists(file_setting_)) {
+    if (std::filesystem::exists(file_setting_)) {
         GetSetButtonPosition();
     }
     SetSettings();

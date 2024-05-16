@@ -388,27 +388,18 @@ void SimulateKeyPress(WORD keyCode) {
 	SendInput(1, &input, sizeof(INPUT));
 }
 
-void CheckFileSettings(std::string& path) {
-	if (FileExists(path)) {
+void CheckFileSettings(const std::filesystem::path& path) { // accepted
+	if (!std::filesystem::exists(path)) {
 		return;
 	}
-	auto pos = path.find_last_of('\\');
+	std::filesystem::create_directories(path.parent_path());
 
-	if (pos == std::string::npos) {
-		return;
-	}
-
-	std::string directory = path.substr(0, pos);
-	if (!FileExists(directory)) {
-		std::filesystem::create_directory(directory);
-	}
-
-	std::ofstream out;
-	out.open(path);
+	std::ofstream out(path, std::ios::out);
 	if (!out.is_open()) {
 		std::cout << "settings file was not created or opened"s << std::endl;
 		return;
 	}
+
 	{
 		out << "webhook"s << std::endl;
 		out << "https://discord.com/api/webhooks/exemple/exemple"s << std::endl << std::endl;
@@ -435,8 +426,8 @@ void CheckFileSettings(std::string& path) {
 		out << "search_window: 0, 0"s << std::endl;
 		out << "first_tp_name_in_list: 0, 0"s << std::endl;
 		out << "teleporting: 0, 0"s << std::endl;
-		out << "take_all: 0, 0"s << std::endl;
-		out << "give_all: 0, 0"s << std::endl;
+		out << "take_everything: 0, 0"s << std::endl;
+		out << "give_everything: 0, 0"s << std::endl;
 		out << "close_inventory: 0, 0"s << std::endl;
 		out << "names" << std::endl;
 		out << "name of teleports: DROP1, DROP2, DROP3, DROPN"s << std::endl;
@@ -446,9 +437,10 @@ void CheckFileSettings(std::string& path) {
 	{
 		out << "FarmMode"s << std::endl;
 
-		out << "drop_all: 0, 0"s << std::endl;
+		out << "drop_everything: 0, 0"s << std::endl;
 		out << "search_window: 0, 0"s << std::endl << std::endl;
 	}
+
 	out.close();
 }
 
@@ -462,29 +454,32 @@ void GetSetCursorPosition(int& x, int& y) {
 
 		if (GetAsyncKeyState(VK_F1)) {
 			Beep(200, 200);
+
 			if (GetCursorPos(p_cursor_pos)) {
 				x = p_cursor_pos->x;
 				y = p_cursor_pos->y;
-				std::cout << "success"s << std::endl;
+				std::cout << "A success."s << std::endl;
 			}
 			else {
-				std::cout << "Failed to get cursor position"s << std::endl;
+				std::cout << "A position of the cursor wasn't gotten."s << std::endl;
 			}
+
 			button_pressed = true;
 			Sleep(300);
 		}
 	}
+
 	delete p_cursor_pos;
 }
 
-void EditWebhook(std::string& path) {
+void EditWebhook(const std::filesystem::path& path) {
 
 	std::string webhook;
 	std::cout << "Enter webhook: "s;
 	std::getline(std::cin, webhook);
 
-	std::ifstream input;
-	input.open(path);
+	std::ifstream input(path);
+
 	if (!input.is_open()) {
 		std::cout << "Couldn't open the file: "s << path << std::endl;
 		return;
@@ -512,3 +507,21 @@ void EditWebhook(std::string& path) {
 	std::cout << "OK"s << std::endl;
 }
 
+std::vector<std::string> ReadSettings(const std::filesystem::path& path_settings) {
+	std::ifstream input(path_settings, std::ios::in);
+
+	if (!input.is_open()) {
+		std::cout << path_settings << " file was not created or opened"s << std::endl;
+		return;
+	}
+
+	std::vector<std::string> settings;
+	std::string line;
+
+	while (std::getline(input, line)) {
+		settings.push_back(std::move(line));
+	}
+	input.close();
+
+	return settings;
+}
