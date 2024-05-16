@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <windows.h>
-#include <filesystem>
 
 #include "clicker.h"
 #include "utils.h"
@@ -60,9 +59,9 @@ public:
 
 	ServerSpam() = default;
 
-	ServerSpam(const std::filesystem::path& file_settings_path);
+	ServerSpam(std::string file_settings_path);
 
-	ServerSpam(const std::filesystem::path& file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
+	ServerSpam(std::string file_settings_path, LPCWSTR lp_process_name, std::string name_of_the_process_to_run);
 
 	void SpamStart();
 
@@ -86,7 +85,7 @@ private:
 
 	LPCWSTR name_of_the_game_for_crash_process_ = L"ArkAscended"; //  for search game in search menu windows
 
-	std::filesystem::path file_setting_ = "C:\\"_p / "ArkHelper"_p / "settings.txt"_p;
+	std::string file_setting_ = "C:\\ArkHelper\\settings.txt";
 
 }; // class ServerSpam
 

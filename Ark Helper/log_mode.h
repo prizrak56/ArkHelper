@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <chrono>
-#include <filesystem>
 #include "webhook.h"
 
 class LogMode {
@@ -25,13 +24,13 @@ public:
 
 	LogMode() = default;
 
-	LogMode(const std::filesystem::path& image_save_path);
+	LogMode(std::string& image_save_path);
 
 	void ChooseOptionsAndStart();
 
 private:
 
-	std::filesystem::path image_save_path_ = "C:\\"_p / "ArkHelper"_p / "log.png"_p;
+	std::string image_save_path_ = "C:\\ArkHelper\\log.png";
 
 	CoordsScreenResolution screen_coords_;
 

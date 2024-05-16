@@ -3,9 +3,6 @@
 #include <string>
 #include <windows.h>
 #include <vector>
-#include <filesystem>
-
-using namespace std::literals;
 
 enum class Command{
 	NONE,
@@ -126,8 +123,8 @@ void ClearFile(std::string& path);
 
 void SimulateKeyPress(WORD keyCode);
 
-void CheckFileSettings(const std::filesystem::path& path);
+void CheckFileSettings(std::string& path);
 
 void GetSetCursorPosition(int& x, int& y);
 
-void EditWebhook(const std::filesystem::path& path);
+void EditWebhook(std::string& path);

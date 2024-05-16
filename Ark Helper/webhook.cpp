@@ -37,7 +37,7 @@ DiscordWebhook::DiscordWebhook(std::string webhook_path) : webhook_path_(webhook
     SetWebhook();
 }
 
-void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::filesystem::path& image_path){
+void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::string& image_path){
 
     HBITMAP h_bitmap = CaptureScreenshotForWebhook(x, y, width, height);
     std::vector<BYTE> buf;
@@ -60,7 +60,7 @@ void DiscordWebhook::SendImage(int x, int y, int width, int height,const std::fi
 
     // Отправка изображения в Discord через вебхук
     // Send an image to Discord via webhook
-    const std::string command = cmd_for_image_message_ + image_path.string() + "\" " + GetWebHookUrl().string() + " > NUL";
+    const std::string command = cmd_for_image_message_ + image_path + "\" " + GetWebHookUrl() + " > NUL";
     system(command.c_str());
 
     DeleteObject(h_bitmap); // Освобождение ресурсов битмапа  || Freeing up bitmap resources
@@ -95,11 +95,11 @@ int DiscordWebhook::system_no_output(std::string command) noexcept{
     }
 }
 
-const std::filesystem::path DiscordWebhook::GetWebHookUrl() const{
+std::string DiscordWebhook::GetWebHookUrl() const{
     return webhook_path_;
 }
 
-void DiscordWebhook::SendText(const std::filesystem::path& message) {
-    std::string command = cmd_1_for_text_message_ + message.string() + cmd_2_for_text_message_ + GetWebHookUrl().string();
+void DiscordWebhook::SendText(std::string message) {
+    std::string command = cmd_1_for_text_message_ + message + cmd_2_for_text_message_ + GetWebHookUrl();
     system_no_output(command.c_str());
 }

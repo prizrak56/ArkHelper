@@ -9,11 +9,11 @@ using namespace std::literals;
 
 // читаем текст и изображения
 // read text and images
-std::string ReadImage(const std::filesystem::path& image_path) noexcept {
+std::string ReadImage(const std::string& image_path) noexcept {
     tesseract::TessBaseAPI* api = new tesseract::TessBaseAPI();
     api->Init(NULL, "eng");
 
-    Pix* image = pixRead(image_path.string().c_str());
+    Pix* image = pixRead(image_path.c_str());
 
     api->SetImage(image);
 

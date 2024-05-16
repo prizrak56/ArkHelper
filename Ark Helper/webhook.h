@@ -1,11 +1,5 @@
 #pragma once
-#include <filesystem>
-
 #include "image_processing.h"
-
-std::filesystem::path operator""_p(const char* ch, std::size_t size) {
-	return std::filesystem::path(ch, ch + size);
-}
 
 class DiscordWebhook {
 
@@ -16,13 +10,13 @@ public:
 	DiscordWebhook();
 	DiscordWebhook(std::string webhook_url);
 	
-	void SendImage(int x, int y, int width, int height, const std::filesystem::path& image_path);
+	void SendImage(int x, int y, int width, int height, const std::string& image_path);
 
 	int system_no_output(std::string command) noexcept;
 
-	const std::filesystem::path GetWebHookUrl() const;
+	std::string GetWebHookUrl() const;
 
-	void SendText(const std::filesystem::path& message);
+	void SendText(std::string message);
 
 private:
 
@@ -32,6 +26,6 @@ private:
 
 	const std::string cmd_for_image_message_ = "curl -F \"file1=@";
 
-	std::filesystem::path webhook_path_ = "C:\\"_p / "ArkHelper"_p / "settings.txt"_p;
+	std::string webhook_path_ = "C:\\ArkHelper\\settings.txt";
 
 }; //class DiscordWebhook 

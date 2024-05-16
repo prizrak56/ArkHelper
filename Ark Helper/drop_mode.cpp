@@ -8,7 +8,7 @@
 
 using namespace std::literals;
 
-DropMode::DropMode(const std::filesystem::path& settings_path) : path_settings_(settings_path) {
+DropMode::DropMode(std::string& settings_path) : path_settings_(settings_path) {
     SetSettings();
 }
 
