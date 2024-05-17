@@ -7,10 +7,10 @@
 #include "utils.h"
 
 namespace processing {
-// ---------------------------------- [Log Mode] Realization --------------------------
-//                                                                                    +
-//                                                                                    + ----------------------------------
-// ------------------------------------------------------------------------------------ Auxiliary Entities & Constructor +
+    // ---------------------------------- [Log Mode] Realization --------------------------
+    //                                                                                    +
+    //                                                                                    + ----------------------------------
+    // ------------------------------------------------------------------------------------ Auxiliary Entities & Constructor +
     using namespace std::literals;
 
     std::filesystem::path operator""_p(const char* ch, std::size_t size) {
@@ -19,10 +19,10 @@ namespace processing {
 
     LogMode::LogMode(const std::filesystem::path& image_save_path) : image_save_path_(image_save_path / "log.png"_p) {}
 
-//
-// 
-//                                                                                    + --------------------
-// ------------------------------------------------------------------------------------ Log Mode Interface +
+    //
+    // 
+    //                                                                                    + --------------------
+    // ------------------------------------------------------------------------------------ Log Mode Interface +
 
     void LogMode::EditScreenSettings(int x, int y, int width, int height) {
         screen_coords_.x = x;
@@ -113,10 +113,10 @@ namespace processing {
         reset_timer_duration = 0;
     }
 
-//
-// 
-//                                                                                    + --------------------------
-// ------------------------------------------------------------------------------------ Log Mode Private Methods +
+    //
+    // 
+    //                                                                                    + --------------------------
+    // ------------------------------------------------------------------------------------ Log Mode Private Methods +
 
     void LogMode::ChooseOptionsAndStart() {
         system("CLS");
@@ -181,6 +181,8 @@ namespace processing {
         }
         NoticeUser(everyone_time_counter, not_everyone_time_counter);
     }
+} // namespace processing
+
 
 //<<<<<<< Updated upstream
 //=======
@@ -240,4 +242,3 @@ namespace processing {
 //
 //        NoticeUser(everyone_time_counter, not_everyone_time_counter);
 //    }
-} // namespace processing
