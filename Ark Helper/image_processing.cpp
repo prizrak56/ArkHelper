@@ -2,10 +2,10 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "image_processing.h"
+
 #include <leptonica/allheaders.h> // for reading image
 #include <tesseract/baseapi.h> // for reading image
-
-#include "image_processing.h"
 
 namespace processing {
     using namespace std::literals;

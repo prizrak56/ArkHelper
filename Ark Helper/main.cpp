@@ -15,12 +15,12 @@ using namespace std::literals;
 int main() {
 	// throw when cout when the error occurs
 
-	std::filesystem::path settings_path("C:\\"_p / "ArkHelper"_p / "settings.txt"_p);
-	CheckFileSettings(settings_path);
+	std::filesystem::path settings_path(std::filesystem::path("C:\\") / std::filesystem::path("ArkHelper") / std::filesystem::path("settings.txt"));
+	utils::CheckFileSettings(settings_path);
 
 	SetConsoleTitle(L"prizrak_p");
 
-	std::thread observer(ObServer);
+	std::thread observer(utils::Observe);
 
 	const LPCWSTR target_window_Name = L"ArkAscended";
 	HWND h_window_handle = FindWindow(NULL, target_window_Name);
@@ -29,87 +29,87 @@ int main() {
 	clicker::RightMouseClicker right_click(h_window_handle);
 	clicker::SpaceButtonClicker space_click(h_window_handle);
 
-	farm::FarmMode farm(h_window_handle);
+	farm_mode::FarmMode farm(h_window_handle);
 	processing::LogMode log(settings_path.parent_path());
 	spam::ServerSpam spam(settings_path);
-	farm::DropMode looting_drop(settings_path);
+	drop_mode::DropMode looting_drop(settings_path);
 
 	size_t delay = 0;
 
-	MenuMessage();
+	processing::PrintMenuMessage1();
 
-	Page last_page = Page::NONE;
+	utils::Page last_page = utils::Page::NONE;
 
 	while (true) {
 		
-		if (page_menu == Page::FIRST && last_page != Page::FIRST) {
-			last_page = Page::FIRST;
+		if (utils::page_menu == utils::Page::FIRST && last_page != utils::Page::FIRST) {
+			last_page = utils::Page::FIRST;
 			system("cls");
-			MenuMessage();
+			processing::PrintMenuMessage1();
 		}
-		else if (page_menu == Page::SECOND && last_page != Page::SECOND){
-			last_page = Page::SECOND;
+		else if (utils::page_menu == utils::Page::SECOND && last_page != utils::Page::SECOND){
+			last_page = utils::Page::SECOND;
 			system("cls");
-			MenuMessage2();
+			processing::PrintMenuMessage2();
 		}
 
-		switch (mode_selection.first) {
+		switch (utils::mode_selection.first) {
 
-		case Command::LEFT_CLICK:
+		case utils::Command::LEFT_CLICK:
 			if (h_window_handle != NULL) {
-				left_click.PressKeyUntilHotKeyIsInputed(is_enable);
+				left_click.PressKeyUntilHotKeyIsInputed(utils::is_enable);
 			}
 			else { 
-				EnableDisableFunc(Command::NONE);
-				std::cout << std::endl << "Process not found ("s << ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
+				utils::EnableDisableFunc(utils::Command::NONE);
+				std::cout << std::endl << "Process not found ("s << processing::ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
 			}
 			break;
 
-		case Command::RIGHT_CLICK:
+		case utils::Command::RIGHT_CLICK:
 			if (h_window_handle != NULL) {
-				right_click.PressKeyUntilHotKeyIsInputed(is_enable);
+				right_click.PressKeyUntilHotKeyIsInputed(utils::is_enable);
 			}
 			else { 
-				EnableDisableFunc(Command::NONE);
-				std::cout << std::endl << "Process not found ("s << ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
+				utils::EnableDisableFunc(utils::Command::NONE);
+				std::cout << std::endl << "Process not found ("s << processing::ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
 			}
 			break;
 
-		case Command::SPACE_CLICK:
+		case utils::Command::SPACE_CLICK:
 			if (h_window_handle != NULL) {
-				space_click.PressKeyUntilHotKeyIsInputed(is_enable);
+				space_click.PressKeyUntilHotKeyIsInputed(utils::is_enable);
 			}
 			else {
-				EnableDisableFunc(Command::NONE);
-				std::cout << std::endl << "Process not found ("s << ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
+				utils::EnableDisableFunc(utils::Command::NONE);
+				std::cout << std::endl << "Process not found ("s << processing::ConvertLPCWSTRToString(target_window_Name) << ")"s << std::endl;
 			}
 			break;
 
-		case Command::OPEN_GIT:
-			OpenGitHub();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+		case utils::Command::OPEN_GIT:
+			utils::OpenGitHub();
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::OPEN_YT:
-			OpenYouTube();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+		case utils::Command::OPEN_YT:
+			utils::OpenYouTube();
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::LOG_MODE:
+		case utils::Command::LOG_MODE:
 			log.ChooseOptionsAndStart();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::FARM_MODE:
+		case utils::Command::FARM_MODE:
 			farm.StartFarm();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::DELAY:
+		case utils::Command::DELAY:
 
 			system("CLS");
 			std::cout << "default - 200 ms"s << std::endl;
@@ -117,65 +117,65 @@ int main() {
 			std::cin >> delay;
 			std::cout << std::endl;
 			Beep(1000, 200);
-			MenuMessage();
+			processing::PrintMenuMessage1();
 			left_click.SetDelay(delay);
 			right_click.SetDelay(delay);
 			space_click.SetDelay(delay);
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::SPAM_MODE:
-			mode_selection.second = Command::SELECT_SETTINGS;
+		case utils::Command::SPAM_MODE:
+			utils::mode_selection.second = utils::Command::SELECT_SETTINGS;
 			spam.SpamStart();
 			break;
 
-		case Command::DROP_MODE:
-			mode_selection.second = Command::SELECT_SETTINGS;
+		case utils::Command::DROP_MODE:
+			utils::mode_selection.second = utils::Command::SELECT_SETTINGS;
 			looting_drop.StartLooting();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
 			break;
 
-		case Command::EDIT_SPAM_MOD :
+		case utils::Command::EDIT_SPAM_MOD :
 			spam.GetSetButtonPosition();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
-			page_menu = Page::FIRST;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
+			utils::page_menu = utils::Page::FIRST;
 			system("cls");
-			MenuMessage();
+			processing::PrintMenuMessage1();
 			Sleep(200);
 			break;
 
-		case Command::EDIT_DROP_MODE:
+		case utils::Command::EDIT_DROP_MODE:
 			looting_drop.EditSettings();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
-			page_menu = Page::FIRST;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
+			utils::page_menu = utils::Page::FIRST;
 			system("cls");
-			MenuMessage();
+			processing::PrintMenuMessage1();
 			Sleep(200);
 			break;
 
-		case Command::EDIT_WEBHOOK:
+		case utils::Command::EDIT_WEBHOOK:
 			system("cls");
-			EditWebhook(settings_path);
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
-			page_menu = Page::FIRST;
+			utils::EditWebhook(settings_path);
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
+			utils::page_menu = utils::Page::FIRST;
 			system("cls");
-			MenuMessage();
+			processing::PrintMenuMessage1();
 			Sleep(200);
 			break;
 
-		case Command::EDIT_FARM_COORD:
+		case utils::Command::EDIT_FARM_COORD:
 			system("cls");
 			farm.EditCoords();
-			mode_selection.first = Command::NONE;
-			mode_selection.second = Command::NONE;
-			page_menu = Page::FIRST;
+			utils::mode_selection.first = utils::Command::NONE;
+			utils::mode_selection.second = utils::Command::NONE;
+			utils::page_menu = utils::Page::FIRST;
 			system("cls");
-			MenuMessage();
+			processing::PrintMenuMessage1();
 			Sleep(200);
 			break;
 		}

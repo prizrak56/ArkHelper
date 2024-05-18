@@ -9,23 +9,18 @@
 #include "clicker.h"
 #include "utils.h"
 
-namespace farm {
-// ----------------------------------- [Drop Mode] Definition -------------------------
-//                                                                                    +
-//                                                                                    + ------------------
-// ------------------------------------------------------------------------------------ Drop Mode Itself +
-
+namespace drop_mode {
 	std::filesystem::path operator""_p(const char* ch, std::size_t size);
 
 	class DropMode {
 	private:
 		struct DropCoordsPosSettings {
-			Point search_window;
-			Point first_tp_name_in_list;
-			Point teleporting;
-			Point take_everything;
-			Point give_everything;
-			Point close_invetory;
+			utils::Point search_window;
+			utils::Point first_tp_name_in_list;
+			utils::Point teleporting;
+			utils::Point take_everything;
+			utils::Point give_everything;
+			utils::Point close_invetory;
 		};
 
 		void CloseInventory();
@@ -60,4 +55,4 @@ namespace farm {
 
 		clicker::LeftMouseClicker left_button_;
 	};
-} // namespace farm
+} // namespace drop_mode

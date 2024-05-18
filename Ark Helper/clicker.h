@@ -27,8 +27,6 @@ namespace clicker {
 		virtual void ClickInsideApplication() const = 0;
 	};
 
-//
-// 
 //                                                                                    + --------------------
 // ------------------------------------------------------------------------------------ Left Mouse Clicker +
 
@@ -43,8 +41,6 @@ namespace clicker {
 		void ClickInsideApplication() const override;
 	};
 
-//
-// 
 //                                                                                    + ---------------------
 // ------------------------------------------------------------------------------------ Right Mouse Clicker +
 
@@ -59,8 +55,6 @@ namespace clicker {
 		void ClickInsideApplication() const override;
 	};
 
-//
-// 
 //                                                                                    + ----------------------
 // ------------------------------------------------------------------------------------ Space Button Clicker +
 

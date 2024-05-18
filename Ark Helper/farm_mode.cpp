@@ -5,25 +5,23 @@
 #include <utility>
 #include <vector>
 
-
 #include "farm_mode.h"
 #include "string_processing.h"
 
-namespace farm {
+namespace farm_mode {
 // ---------------------------------- [Farm Mode] Realization -------------------------
 //                                                                                    +
-//                                                                                    + -------------
-// ------------------------------------------------------------------------------------ Constuctors +
+//                                                                                    + -----------------------------------
+// ------------------------------------------------------------------------------------ Auxiliary Entities & Constructors +
+
+    std::filesystem::path operator""_p(const char* ch, std::size_t size) {
+        return std::filesystem::path(ch, ch + size);
+    }
 
     FarmMode::FarmMode(HWND h_window_handle) : h_window_handle_(h_window_handle) {}
     FarmMode::FarmMode(const std::filesystem::path& file_with_setting, HWND& h_window_handle) : path_settings_(file_with_setting), h_window_handle_(h_window_handle) {}
 
-    /*std::filesystem::path operator""_p(const char* ch, std::size_t size) {
-        return std::filesystem::path(ch, ch + size);                                    ERROR
-    }*/
 
-// 
-// 
 //                                                                                    + ---------------------------
 // ------------------------------------------------------------------------------------ Farm Mode Private Methods +
 
@@ -31,10 +29,10 @@ namespace farm {
 
         if (h_window_handle_ == NULL) {
             system("cls");
-            MenuMessage();
+            processing::PrintMenuMessage1();
             std::cout << "The process was not found."s << std::endl;
-            mode_selection.second = Command::NONE;
-            EnableDisableFunc(Command::NONE);
+            utils::mode_selection.second = utils::Command::NONE;
+            utils::EnableDisableFunc(utils::Command::NONE);
             return;
         }
 
@@ -49,13 +47,13 @@ namespace farm {
 
         while (std::getline(input, line)) {
             if (counter == 27) {
-                auto [x, y] = ParseCoords(std::move(line));
+                auto [x, y] = processing::ParseCoords(std::move(line));
                 drop_button_.x = x;
                 drop_button_.y = y;
             }
 
             if (counter == 28) {
-                auto [x, y] = ParseCoords(std::move(line));
+                auto [x, y] = processing::ParseCoords(std::move(line));
                 search_button_.x = x;
                 search_button_.y = y;
             }
@@ -135,7 +133,7 @@ namespace farm {
 
     void FarmMode::SelectResources(int first_timer, int second_timer) {
         
-        while (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
+        while (utils::mode_selection.first == utils::Command::FARM_MODE && utils::mode_selection.second == utils::Command::SELECT_SETTINGS) {
             system("cls");
 
             std::cout << "F1 - Start"s << std::endl << std::endl;
@@ -150,46 +148,46 @@ namespace farm {
             std::cout << std::boolalpha << "F8 - Metal "s << b_metal_ << std::endl;
             std::cout << "F9 - Set clicking time before reset in seconds"s << std::endl;
 
-            switch (resources) {
-            case Resources::NONE:
+            switch (utils::resources) {
+            case utils::Resources::NONE:
                 break;
 
-            case Resources::DELAY:
+            case utils::Resources::DELAY:
                 system("cls");
                 std::cout << "Enter number of seconds: "s;
                 std::cin >> first_timer;
                 std::cout << "OK == OK"s << std::endl;
                 system("cls");
-                resources = Resources::NONE;
+                utils::resources = utils::Resources::NONE;
                 Sleep(500);
 
                 break;
 
-            case Resources::FLINT:
+            case utils::Resources::FLINT:
                 ToggleResource(b_flint_);
                 break;
 
-            case Resources::STONE:
+            case utils::Resources::STONE:
                 ToggleResource(b_stone_);
                 break;
 
-            case Resources::WOOD:
+            case utils::Resources::WOOD:
                 ToggleResource(b_wood_);
                 break;
 
-            case Resources::BERRY:
+            case utils::Resources::BERRY:
                 ToggleResource(b_berry_);
                 break;
 
-            case Resources::THATCH:
+            case utils::Resources::THATCH:
                 ToggleResource(b_thatch_);
                 break;
 
-            case Resources::SAND:
+            case utils::Resources::SAND:
                 ToggleResource(b_sand_);
                 break;
 
-            case Resources::METAL:
+            case utils::Resources::METAL:
                 ToggleResource(b_metal_);
                 break;
             }
@@ -206,31 +204,29 @@ namespace farm {
             resource = true;
         }
 
-        resources = Resources::NONE;
+        utils::resources = utils::Resources::NONE;
         Sleep(100);
     }
 
-// 
-// 
 //                                                                                    + ---------------------
 // ------------------------------------------------------------------------------------ Farm Mode Interface +
 
     void FarmMode::StartFarm() {
 
         ApplyOrInitializeSettingsFromFile();
-        mode_selection.second = Command::SELECT_SETTINGS;
+        utils::mode_selection.second = utils::Command::SELECT_SETTINGS;
 
         int first_timer = 100;
         int second_timer = 0;
         SelectResources(first_timer, second_timer);
 
-        while (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::START) {
+        while (utils::mode_selection.first == utils::Command::FARM_MODE && utils::mode_selection.second == utils::Command::START) {
 
             while (first_timer > second_timer) {
                 PostMessage(h_window_handle_, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(0, 0));
                 PostMessage(h_window_handle_, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
 
-                if (mode_selection.first != Command::FARM_MODE || mode_selection.second != Command::START) {
+                if (utils::mode_selection.first != utils::Command::FARM_MODE || utils::mode_selection.second != utils::Command::START) {
                     break;
                 }
 
@@ -243,14 +239,14 @@ namespace farm {
             }
 
             second_timer = 0;
-            if (mode_selection.first == Command::FARM_MODE && mode_selection.second == Command::START) {
+            if (utils::mode_selection.first == utils::Command::FARM_MODE && utils::mode_selection.second == utils::Command::START) {
                 std::cout << "Dropping"s << std::endl;
                 HandleInventory();
             }
         }
         system("cls");
 
-        MenuMessage();
+        processing::PrintMenuMessage1();
     }
     
     void FarmMode::EditCoords() {
@@ -269,10 +265,10 @@ namespace farm {
         input.close();
 
         std::cout << "Specify coordinates of the \"Drop everything\" button."s << std::endl;
-        GetSetCursorPosition(drop_button_.x, drop_button_.y);
+        utils::GetSetCursorPosition(drop_button_.x, drop_button_.y);
 
         std::cout << "Specify coordinates of the \"Search window\" button."s << std::endl;
-        GetSetCursorPosition(search_button_.x, search_button_.y);
+        utils::GetSetCursorPosition(search_button_.x, search_button_.y);
 
         lines[27] = "drop_everything: "s + std::to_string(drop_button_.x) + ", " + std::to_string(drop_button_.y);
         lines[28] = "search_window: "s + std::to_string(search_button_.x) + ", " + std::to_string(search_button_.y);
@@ -289,4 +285,4 @@ namespace farm {
         }
         out.close();
     }
-} // namespace farm
+} // namespace farm_mode

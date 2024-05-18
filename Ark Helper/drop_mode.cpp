@@ -1,15 +1,19 @@
 #include <cmath>
-// #include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <utility>
 #include <stdexcept>
+#include <utility>
 
 #include "drop_mode.h"
 #include "string_processing.h"
 
-namespace farm {
+namespace drop_mode {
     using namespace std::literals;
+
+// ---------------------------------- [Drop Mode] Realization -------------------------
+//                                                                                    +
+//                                                                                    + -----------------------------------
+// ------------------------------------------------------------------------------------ Auxiliary Entities & Constructors +
 
     std::filesystem::path operator""_p(const char* ch, std::size_t size) {
         return std::filesystem::path(ch, ch + size);
@@ -19,8 +23,6 @@ namespace farm {
         SetSettings();
     }
 
-// ---------------------------------- [Drop Mode] Realization -------------------------
-//                                                                                    +
 //                                                                                    + ---------------------------
 // ------------------------------------------------------------------------------------ Drop Mode Private Methods +
 
@@ -64,7 +66,7 @@ namespace farm {
     void DropMode::EditCoords() {
         Sleep(400);
 
-        std::vector<std::string> settings = std::move(ReadSettings(path_settings_));
+        std::vector<std::string> settings = std::move(utils::ReadSettings(path_settings_));
         SaveSettings();
 
         settings[16] = "search_window: "s + std::to_string(settings_.search_window.x) + ", "s + std::to_string(settings_.search_window.y);
@@ -85,9 +87,9 @@ namespace farm {
         }
         out.close();
 
-        mode_selection.first = Command::NONE;
-        mode_selection.second = Command::NONE;
-        drop_mode_command = DropModeEnum::NONE;
+        utils::mode_selection.first = utils::Command::NONE;
+        utils::mode_selection.second = utils::Command::NONE;
+        utils::drop_mode_command = utils::DropModeEnum::NONE;
     }
 
     void DropMode::EditTPName() {
@@ -114,16 +116,16 @@ namespace farm {
         }
         out.close();
 
-        mode_selection.first = Command::NONE;
-        mode_selection.second = Command::NONE;
-        drop_mode_command = DropModeEnum::NONE;
+        utils::mode_selection.first = utils::Command::NONE;
+        utils::mode_selection.second = utils::Command::NONE;
+        utils::drop_mode_command = utils::DropModeEnum::NONE;
     }
 
     void DropMode::EnterTPName(std::string_view teleport_name) {
 
         std::cout << "Entering TP name, start"s << std::endl;
         for (auto letter : teleport_name) {
-            SimulateKeyPress(letter);   // enter tp_name
+            utils::SimulateKeyPress(letter);   // enter tp_name
             Sleep(50);
         }
 
@@ -176,7 +178,7 @@ namespace farm {
         std::cout << "Enter the name of the teleport to save your loot (MY TP SAVE): "s;
         std::getline(std::cin, save_tp);
 
-        std::vector<std::string> settings = std::move(ReadSettings(path_settings_));
+        std::vector<std::string> settings = std::move(utils::ReadSettings(path_settings_));
         std::string result;
         result += "Name of teleports: "s;
 
@@ -223,7 +225,7 @@ namespace farm {
         std::cout << "360 with E, start"s << std::endl;
         for (int i = 0; i < 380; i++) {
             mouse_event(MOUSEEVENTF_MOVE, -10, 0, 0, 0);
-            SimulateKeyPress('E');
+            utils::SimulateKeyPress('E');
             Sleep(20);
         }
 
@@ -233,7 +235,7 @@ namespace farm {
 
     void DropMode::OpenTP() const {
         std::cout << "Opening teleport, start"s << std::endl;
-        SimulateKeyPress('E');
+        utils::SimulateKeyPress('E');
         std::cout << "Opening teleport, end"s << std::endl;
         Sleep(1000);
     }
@@ -274,32 +276,32 @@ namespace farm {
             switch (i) {
             case 0:
                 std::cout << "Specify coordinates of the search window (enter a name of the teleport)."s << std::endl;
-                GetSetCursorPosition(settings_.search_window.x, settings_.search_window.y);
+                utils::GetSetCursorPosition(settings_.search_window.x, settings_.search_window.y);
                 break;
 
             case 1:
                 std::cout << "Indicate coordinates of the first teleport in the list."s << std::endl;
-                GetSetCursorPosition(settings_.first_tp_name_in_list.x, settings_.first_tp_name_in_list.y);
+                utils::GetSetCursorPosition(settings_.first_tp_name_in_list.x, settings_.first_tp_name_in_list.y);
                 break;
 
             case 2:
                 std::cout << "Indicate coordinates of the main teleportation button."s << std::endl;
-                GetSetCursorPosition(settings_.teleporting.x, settings_.teleporting.y);
+                utils::GetSetCursorPosition(settings_.teleporting.x, settings_.teleporting.y);
                 break;
 
             case 3:
                 std::cout << "Indicate coordinates of the \"Take everything\" button."s << std::endl;
-                GetSetCursorPosition(settings_.take_everything.x, settings_.take_everything.y);
+                utils::GetSetCursorPosition(settings_.take_everything.x, settings_.take_everything.y);
                 break;
 
             case 4:
                 std::cout << "Indicate coordinates of the \"Give everything\" button."s << std::endl;
-                GetSetCursorPosition(settings_.give_everything.x, settings_.give_everything.y);
+                utils::GetSetCursorPosition(settings_.give_everything.x, settings_.give_everything.y);
                 break;
 
             case 5:
                 std::cout << "Indicate coordinates of the \"Close inventory\" button."s << std::endl;
-                GetSetCursorPosition(settings_.close_invetory.x, settings_.close_invetory.y);
+                utils::GetSetCursorPosition(settings_.close_invetory.x, settings_.close_invetory.y);
                 break;
             }
         }
@@ -320,7 +322,7 @@ namespace farm {
             if (settings_is_found == true && line != "") {
 
                 if (counter == 7 || counter == 8) {
-                    std::vector<std::string> tp_names = ParseName(line);
+                    std::vector<std::string> tp_names = std::move(processing::ParseName(line));
                     if (counter == 7) {
                         teleports_name_ = std::move(tp_names);
                     }
@@ -332,7 +334,7 @@ namespace farm {
                 }
 
                 if (counter != 6) {
-                    auto [x, y] = ParseCoords(line);
+                    auto [x, y] = processing::ParseCoords(line);
 
                     switch (counter) {
                     case 0:
@@ -366,6 +368,7 @@ namespace farm {
                         break;
                     }
                 }
+
                 ++counter;
                 continue;
             }
@@ -394,8 +397,6 @@ namespace farm {
         Sleep(500);
     }
 
-// ----------------------------------- [Drop Mode] Definition -------------------------
-//                                                                                    +
 //                                                                                    + ---------------------
 // ------------------------------------------------------------------------------------ Drop Mode Interface +
 
@@ -405,12 +406,12 @@ namespace farm {
         std::cout << "F1 - Edit coords pos"s << std::endl;
         std::cout << "F2 - Edit drop name"s << std::endl;
 
-        while (mode_selection.first == Command::EDIT_DROP_MODE) {
-            if (mode_selection.second == Command::EDIT_DROP_COORD) {
+        while (utils::mode_selection.first == utils::Command::EDIT_DROP_MODE) {
+            if (utils::mode_selection.second == utils::Command::EDIT_DROP_COORD) {
                 EditCoords();
                 return;
             }
-            if (mode_selection.second == Command::EDIT_DROP_NAME) {
+            if (utils::mode_selection.second == utils::Command::EDIT_DROP_NAME) {
                 EditTPName();
                 return;
             }
@@ -429,10 +430,10 @@ namespace farm {
 
         int food = 0;
 
-        while (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS 
-            || mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
+        while (utils::mode_selection.first == utils::Command::DROP_MODE && utils::mode_selection.second == utils::Command::SELECT_SETTINGS
+            || utils::mode_selection.first == utils::Command::DROP_MODE && utils::mode_selection.second == utils::Command::START) {
 
-            if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::START) {
+            if (utils::mode_selection.first == utils::Command::DROP_MODE && utils::mode_selection.second == utils::Command::START) {
 
                 if (teleports_name_.size() == 0) {
                     std::cout << "TP name was not found."s;
@@ -468,8 +469,8 @@ namespace farm {
                     LootCrate(save_teleport_name_, false);
 
                     if (food == 3) {
-                        SimulateKeyPress('1');
-                        SimulateKeyPress('2');
+                        utils::SimulateKeyPress('1');
+                        utils::SimulateKeyPress('2');
                         food = -1;
                     }
 
@@ -481,16 +482,16 @@ namespace farm {
                 }
             }
 
-            if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS && drop_mode_command == DropModeEnum::EDIT_COORDS) {
+            if (utils::mode_selection.first == utils::Command::DROP_MODE && utils::mode_selection.second == utils::Command::SELECT_SETTINGS && utils::drop_mode_command == utils::DropModeEnum::EDIT_COORDS) {
                 EditCoords();
             }
 
-            if (mode_selection.first == Command::DROP_MODE && mode_selection.second == Command::SELECT_SETTINGS && drop_mode_command == DropModeEnum::EDIT_TP_NAME) {
+            if (utils::mode_selection.first == utils::Command::DROP_MODE && utils::mode_selection.second == utils::Command::SELECT_SETTINGS && utils::drop_mode_command == utils::DropModeEnum::EDIT_TP_NAME) {
                 EditTPName();
             }
             Sleep(20);
         }
         system("cls");
-        MenuMessage();
+        processing::PrintMenuMessage1();
     }
-} // namespace farm
+} // namespace drop_mode

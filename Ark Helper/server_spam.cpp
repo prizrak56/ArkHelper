@@ -67,11 +67,11 @@ namespace spam {
     void ServerSpam::EnterText() {
         Sleep(700);
         for (auto x : game_name_to_search_in_case_of_crash_) {
-            SimulateKeyPress(x);
+            utils::SimulateKeyPress(x);
             Sleep(300);
         }
         Sleep(500);
-        SimulateKeyPress(0x0D);
+        utils::SimulateKeyPress(0x0D);
         Sleep(500);
     }
 
@@ -107,9 +107,9 @@ namespace spam {
     void ServerSpam::OpenSearchMenu() {
 
         Sleep(1500);
-        SimulateKeyPress(0x0D);
+        utils::SimulateKeyPress(0x0D);
         Sleep(1000);
-        SimulateKeyPress(0x0D);
+        utils::SimulateKeyPress(0x0D);
         Sleep(500);
         keybd_event(VK_LWIN, 0, 0, 0);
         Sleep(100);
@@ -142,7 +142,7 @@ namespace spam {
         Sleep(300);
         std::string int_to_string = std::to_string(server_number_);
         for (int i = 0; i < 4; i++) {
-            SimulateKeyPress(int_to_string[i]);
+            utils::SimulateKeyPress(int_to_string[i]);
             Sleep(200);
         }
         ++server_number_;
@@ -160,7 +160,7 @@ namespace spam {
 
     void ServerSpam::LeaveServer() {
         Sleep(200);
-        SimulateKeyPress(0x1B);
+        utils::SimulateKeyPress(0x1B);
         Sleep(200);
         SetCursorPos(settings_.exit_to_main_menu.x, settings_.exit_to_main_menu.y);
         Sleep(200);
@@ -183,7 +183,7 @@ namespace spam {
         while (std::getline(input, line)) {
 
             if (settings_are_found == true && line != "") {
-                auto [x, y] = ParseCoords(line);
+                auto [x, y] = processing::ParseCoords(line);
 
                 switch (counter) {
                 case 0:
@@ -257,14 +257,14 @@ namespace spam {
 
     void ServerSpam::SimulateCtrlV() {
         Sleep(500);
-        SimulateKeyPress(0x0D);
+        utils::SimulateKeyPress(0x0D);
         Sleep(1000);
         keybd_event(VK_CONTROL, 0, 0, 0);
         keybd_event('V', 0, 0, 0);
         keybd_event('V', 0, KEYEVENTF_KEYUP, 0);
         keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
         Sleep(1000);
-        SimulateKeyPress(0x0D);
+        utils::SimulateKeyPress(0x0D);
         Sleep(1000);
     }
 
@@ -300,35 +300,35 @@ namespace spam {
         system("cls");
 
         std::cout << "You need indicate coordinates which is in the upper left part of the \"Press to start\" button in the game main menu."s << std::endl;
-        GetSetCursorPosition(settings_.press_to_start.x, settings_.press_to_start.y);
+        utils::GetSetCursorPosition(settings_.press_to_start.x, settings_.press_to_start.y);
 
         std::cout << "Specify coordinates of the search box which is situated in the server list."s << std::endl;
-        GetSetCursorPosition(settings_.search_server.x, settings_.search_server.y);
+        utils::GetSetCursorPosition(settings_.search_server.x, settings_.search_server.y);
 
         std::cout << "Specify coordinates of the \"Refresh\" button."s << std::endl;
-        GetSetCursorPosition(settings_.refresh_server.x, settings_.refresh_server.y);
+        utils::GetSetCursorPosition(settings_.refresh_server.x, settings_.refresh_server.y);
 
         std::cout << "Specify coordinates of the \"Back\" button which is situated in the server list."s << std::endl;
-        GetSetCursorPosition(settings_.back_if_server_not_found.x, settings_.back_if_server_not_found.y);
+        utils::GetSetCursorPosition(settings_.back_if_server_not_found.x, settings_.back_if_server_not_found.y);
 
         std::cout << "Specify coordinates of the second \"Back\" button."s << std::endl;
-        GetSetCursorPosition(settings_.back2_if_server_not_found.x, settings_.back2_if_server_not_found.y);
+        utils::GetSetCursorPosition(settings_.back2_if_server_not_found.x, settings_.back2_if_server_not_found.y);
 
         std::cout << "Indicate coordinates of the first \"Join\" button in the server list to connect to the server."s << std::endl;
-        GetSetCursorPosition(settings_.join_to_server.x, settings_.join_to_server.y);
+        utils::GetSetCursorPosition(settings_.join_to_server.x, settings_.join_to_server.y);
 
         std::cout << "Specify coordinates of the second \"Join\" button to connect to the server. "s;
         std::cout << "(The button on the left side of the screen when opening the window with mods)."s << std::endl;
-        GetSetCursorPosition(settings_.join_to_server_mode.x, settings_.join_to_server_mode.y);
+        utils::GetSetCursorPosition(settings_.join_to_server_mode.x, settings_.join_to_server_mode.y);
 
         std::cout << "Indicate coordinates of the first server in the list."s << std::endl;
-        GetSetCursorPosition(settings_.first_server.x, settings_.first_server.y);
+        utils::GetSetCursorPosition(settings_.first_server.x, settings_.first_server.y);
 
         std::cout << "Indicate coordinates of the character creation button (\"Create\") when logging into the server."s << std::endl;
-        GetSetCursorPosition(settings_.create_ppl.x, settings_.create_ppl.y);
+        utils::GetSetCursorPosition(settings_.create_ppl.x, settings_.create_ppl.y);
 
         std::cout << "Specify coordinates of the \"Exit to main menu\" button."s << std::endl;
-        GetSetCursorPosition(settings_.exit_to_main_menu.x, settings_.exit_to_main_menu.y);
+        utils::GetSetCursorPosition(settings_.exit_to_main_menu.x, settings_.exit_to_main_menu.y);
 
         std::ifstream input(file_settings_, std::ios::in);
 
@@ -383,10 +383,10 @@ namespace spam {
         std::cout << "Press F1 - to start"s << std::endl;
         std::cout << "Press F2 - to edit settings"s << std::endl;
 
-        while (mode_selection.first == Command::SPAM_MODE && mode_selection.second == Command::SELECT_SETTINGS) {
-            if (spam_command == SpamCommand::EDIT) {
+        while (utils::mode_selection.first == utils::Command::SPAM_MODE && utils::mode_selection.second == utils::Command::SELECT_SETTINGS) {
+            if (utils::spam_command == utils::SpamCommand::EDIT) {
                 GetSetButtonPosition();
-                spam_command = SpamCommand::NONE;
+                utils::spam_command = utils::SpamCommand::NONE;
             }
 
             Sleep(100);
@@ -405,9 +405,9 @@ namespace spam {
         int height = 400;
         SetWindowPos(console_window, HWND_TOPMOST, 0, 0, width, height, SWP_SHOWWINDOW);
 
-        while (mode_selection.first == Command::SPAM_MODE && mode_selection.second == Command::START) {
+        while (utils::mode_selection.first == utils::Command::SPAM_MODE && utils::mode_selection.second == utils::Command::START) {
 
-            while (spam_command == SpamCommand::START) {
+            while (utils::spam_command == utils::SpamCommand::START) {
 
                 std::cout << "PressToStart();"s << std::endl;
                 PressToStart();

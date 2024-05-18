@@ -7,11 +7,6 @@
 #include "webhook.h"
 
 namespace processing {
-// ----------------------------------- [Log Mode] Definition --------------------------
-//                                                                                    +
-//                                                                                    + -----------------
-// ------------------------------------------------------------------------------------ Log Mode Itself +
-
 	std::filesystem::path operator""_p(const char* ch, std::size_t size);
 
 	class LogMode {
@@ -28,7 +23,7 @@ namespace processing {
 		void EditScreenSettings(int x, int y, int width, int height);
 		void NoticeUser(int everyone_time_counter, int not_everyone_time_counter);
 		void SendDiscordMessageAndRestartTimer(
-			DiscordWebhook& discord_webhook,
+			webhook::DiscordWebhook& discord_webhook,
 			std::chrono::steady_clock::time_point& reset_timer_start,
 			int& reset_timer_duration,
 			bool is_everyone);

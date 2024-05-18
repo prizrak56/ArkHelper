@@ -7,10 +7,10 @@
 #include "utils.h"
 
 namespace processing {
-    // ---------------------------------- [Log Mode] Realization --------------------------
-    //                                                                                    +
-    //                                                                                    + ----------------------------------
-    // ------------------------------------------------------------------------------------ Auxiliary Entities & Constructor +
+// ---------------------------------- [Log Mode] Realization --------------------------
+//                                                                                    +
+//                                                                                    + -----------------------------------
+// ------------------------------------------------------------------------------------ Auxiliary Entities & Constructors +
     using namespace std::literals;
 
     std::filesystem::path operator""_p(const char* ch, std::size_t size) {
@@ -19,23 +19,21 @@ namespace processing {
 
     LogMode::LogMode(const std::filesystem::path& image_save_path) : image_save_path_(image_save_path / "log.png"_p) {}
 
-    //
-    // 
-    //                                                                                    + --------------------
-    // ------------------------------------------------------------------------------------ Log Mode Interface +
+//                                                                                    + --------------------
+// ------------------------------------------------------------------------------------ Log Mode Interface +
 
     void LogMode::EditScreenSettings(int x, int y, int width, int height) {
         screen_coords_.x = x;
         screen_coords_.y = y;
         screen_coords_.height = height;
         screen_coords_.width = width;
-        mode_selection.first = Command::LOG_MODE;
-        mode_selection.second = Command::START;
+        utils::mode_selection.first = utils::Command::LOG_MODE;
+        utils::mode_selection.second = utils::Command::START;
     }
 
     void LogMode::NoticeUser(int everyone_time_counter, int not_everyone_time_counter) {
-        DiscordWebhook discord_webhook;
-        discord_webhook.SendText("Start..."s);
+        webhook::DiscordWebhook discord_webhook;
+        discord_webhook.CraftCommand("Start..."s);
 
         //timer 1
         auto everyone_timer_start = std::chrono::steady_clock::now();
@@ -47,13 +45,13 @@ namespace processing {
         auto not_everyone_timer_end = std::chrono::steady_clock::now();
         auto not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
 
-        while (mode_selection.second == Command::START) {
+        while (utils::mode_selection.second == utils::Command::START) {
 
             system("cls");
             std::cout << "F2 - disable"s << std::endl;
             std::string image_path = image_save_path_.string();
 
-            if (screen_resolution != ScreenResolution::FULL_SCREEN) {
+            if (utils::screen_resolution != utils::ScreenResolution::FULL_SCREEN) {
                 CaptureScreen(image_path.c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
             }
             else {
@@ -70,14 +68,14 @@ namespace processing {
                 SendDiscordMessageAndRestartTimer(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration, false);
             }
 
-            while (mode_selection.second == Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {
+            while (utils::mode_selection.second == utils::Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {
                 everyone_timer_end = std::chrono::steady_clock::now();
                 everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(everyone_timer_end - everyone_timer_start).count();
 
                 not_everyone_timer_end = std::chrono::steady_clock::now();
                 not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
 
-                if (mode_selection.first == Command::NONE && mode_selection.second == Command::NONE) {
+                if (utils::mode_selection.first == utils::Command::NONE && utils::mode_selection.second == utils::Command::NONE) {
                     break;
                 }
 
@@ -86,21 +84,21 @@ namespace processing {
         }
 
         system("cls");
-        MenuMessage();
+        processing::PrintMenuMessage1();
     }
 
     void LogMode::SendDiscordMessageAndRestartTimer(
-        DiscordWebhook& discord_webhook,
+        webhook::DiscordWebhook& discord_webhook,
         std::chrono::steady_clock::time_point& reset_timer_start,
         int& reset_timer_duration,
         bool is_everyone) {
 
         if (is_everyone == true) {
-            discord_webhook.SendText("@everyone"s);
+            discord_webhook.CraftCommand("@everyone"s);
         }
 
-        switch (screen_resolution) {
-        case ScreenResolution::FULL_SCREEN:
+        switch (utils::screen_resolution) {
+        case utils::ScreenResolution::FULL_SCREEN:
             discord_webhook.SendImage(screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full, image_save_path_);
             break;
 
@@ -113,10 +111,10 @@ namespace processing {
         reset_timer_duration = 0;
     }
 
-    //
-    // 
-    //                                                                                    + --------------------------
-    // ------------------------------------------------------------------------------------ Log Mode Private Methods +
+//
+// 
+//                                                                                    + --------------------------
+// ------------------------------------------------------------------------------------ Log Mode Private Methods +
 
     void LogMode::ChooseOptionsAndStart() {
         system("CLS");
@@ -147,32 +145,32 @@ namespace processing {
             << "F4 = Start 3840x2160 (not tested)"s << std::endl
             << "F5 - Start FullScreen (there may be false triggers)"s << std::endl;
 
-        mode_selection.second = Command::SELECT_SETTINGS;
+        utils::mode_selection.second = utils::Command::SELECT_SETTINGS;
 
-        while (mode_selection.second == Command::SELECT_SETTINGS) {
+        while (utils::mode_selection.second == utils::Command::SELECT_SETTINGS) {
 
-            switch (screen_resolution) {
-            case ScreenResolution::S_1920x1080:
+            switch (utils::screen_resolution) {
+            case utils::ScreenResolution::S_1920x1080:
                 Beep(500, 800);
                 EditScreenSettings(750, 120, 400, 635);
                 break;
 
-            case ScreenResolution::S_2560x1440:
+            case utils::ScreenResolution::S_2560x1440:
                 Beep(500, 800);
                 EditScreenSettings(1000, 170, 600, 950);
                 break;
 
-            case ScreenResolution::S_2048x1080:
+            case utils::ScreenResolution::S_2048x1080:
                 Beep(500, 800);
                 EditScreenSettings(800, 120, 430, 635);
                 break;
 
-            case ScreenResolution::S_3840x2160:
+            case utils::ScreenResolution::S_3840x2160:
                 Beep(500, 800);
                 EditScreenSettings(1500, 240, 800, 1260);
                 break;
 
-            case ScreenResolution::FULL_SCREEN:
+            case utils::ScreenResolution::FULL_SCREEN:
                 Beep(500, 800);
                 EditScreenSettings(1, 1, 0, 0);
                 break;
@@ -182,63 +180,3 @@ namespace processing {
         NoticeUser(everyone_time_counter, not_everyone_time_counter);
     }
 } // namespace processing
-
-
-//<<<<<<< Updated upstream
-//=======
-//void LogMode::NoticeUser(int& everyone_time_counter,int& not_everyone_time_counter) {
-//
-//    DiscordWebhook discord_webhook;
-//
-//    discord_webhook.SendText("Start...");
-//
-//    //timer 1
-//    auto everyone_timer_start = std::chrono::steady_clock::now();
-//    auto everyone_timer_end = std::chrono::steady_clock::now();
-//    auto everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(everyone_timer_end - everyone_timer_start).count();
-//
-//    //timer 2
-//    auto not_everyone_timer_start = std::chrono::steady_clock::now();
-//    auto not_everyone_timer_end = std::chrono::steady_clock::now();
-//    auto not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
-//
-//    while (mode_selection.second == Command::START) {
-//
-//        system("cls");
-//        std::cout << "F2 - disable\n";
-//        if (screen_resolution != ScreenResolution::FULL_SCREEN) {
-//            image_processing::CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width, screen_coords_.height);
-//        }
-//        else {
-//            image_processing::CaptureScreen(image_save_path_.string().c_str(), screen_coords_.x, screen_coords_.y, screen_coords_.width_full, screen_coords_.height_full);
-//        }
-//
-//        std::string newStringProc = image_processing::ReadImage(image_save_path_);
-//
-//        bool is_kill_or_destroyed_detected = SplitIntoWordsAndFindWord(newStringProc);
-//
-//        if (is_kill_or_destroyed_detected && everyone_time_counter <= everyone_timer_duration && is_kill_or_destroyed_detected == true) {
-//            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, everyone_timer_start, everyone_timer_duration, is_kill_or_destroyed_detected);
-//        }
-//        else if (not_everyone_timer_duration >= not_everyone_time_counter) {
-//            SendDiscordMessageAndRestartTimerCustomPosScreenResolution(discord_webhook, not_everyone_timer_start, not_everyone_timer_duration,false);
-//        }
-//
-//        while (mode_selection.second == Command::START && everyone_timer_duration < everyone_time_counter && not_everyone_timer_duration < not_everyone_time_counter) {
-//
-//            everyone_timer_end = std::chrono::steady_clock::now();
-//            everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(everyone_timer_end - everyone_timer_start).count();
-//
-//            not_everyone_timer_end = std::chrono::steady_clock::now();
-//            not_everyone_timer_duration = std::chrono::duration_cast<std::chrono::minutes>(not_everyone_timer_end - not_everyone_timer_start).count();
-//
-//            if (mode_selection.first == Command::NONE && mode_selection.second == Command::NONE) {
-//                break;
-//>>>>>>> Stashed changes
-//            }
-//
-//            Sleep(20);
-//        }
-//
-//        NoticeUser(everyone_time_counter, not_everyone_time_counter);
-//    }

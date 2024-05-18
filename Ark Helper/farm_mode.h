@@ -8,19 +8,10 @@
 
 #include "utils.h"
 
-namespace farm {
-// ----------------------------------- [Farm Mode] Definition -------------------------
-//                                                                                    +
-//                                                                                    + --------------------
-// ------------------------------------------------------------------------------------ Auxiliary Entities +
-
+namespace farm_mode {
     using namespace std::literals;
-    std::filesystem::path operator""_p(const char* ch, std::size_t size);
 
-// 
-// 
-//                                                                                    + -----------
-// ------------------------------------------------------------------------------------ Farm Mode +
+    std::filesystem::path operator""_p(const char* ch, std::size_t size);
 
     class FarmMode {
     private:
@@ -40,8 +31,8 @@ namespace farm {
         
     private:
         HWND h_window_handle_ = nullptr;
-        Point search_button_;
-        Point drop_button_;
+        utils::Point search_button_;
+        utils::Point drop_button_;
 
         const std::string stone_ = "STONE"s;
         const std::string berry_ = "BERRY"s;
@@ -61,4 +52,4 @@ namespace farm {
         bool b_sand_ = true;
         bool b_metal_ = false;
     };
-} // namespace farm
+} // namespace farm_mode
