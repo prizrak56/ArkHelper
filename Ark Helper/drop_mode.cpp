@@ -67,7 +67,8 @@ namespace drop_mode {
         Sleep(400);
 
         std::vector<std::string> settings = std::move(utils::ReadSettings(path_settings_));
-        SaveSettings();
+        EditAndSaveSettings();
+
 
         settings[16] = "search_window: "s + std::to_string(settings_.search_window.x) + ", "s + std::to_string(settings_.search_window.y);
         settings[17] = "first_tp_name_in_list: "s + std::to_string(settings_.first_tp_name_in_list.x) + ", "s + std::to_string(settings_.first_tp_name_in_list.y);
@@ -270,7 +271,7 @@ namespace drop_mode {
         return teleport_name;
     }
 
-    void DropMode::SaveSettings() {
+    void DropMode::EditAndSaveSettings() {
         for (std::size_t i = 0; i < 6; i++) {
 
             switch (i) {

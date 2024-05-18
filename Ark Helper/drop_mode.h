@@ -38,7 +38,7 @@ namespace drop_mode {
 		void MoveTo360() const;
 		void OpenTP() const;
 		std::vector<std::string> RequestUserTPNames();
-		void SaveSettings();
+		void EditAndSaveSettings();
 		void SetSettings();
 		void TakeEverything();
 
