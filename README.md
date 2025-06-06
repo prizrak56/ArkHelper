@@ -59,7 +59,7 @@
 
 # Installation
 
-1. Download exe file [https://p-z-r.shop/ArkHelper.rar](https://p-z-r.shop/ArkHelper.rar)
+1. Download exe file [ArkHelperUpdater.exe](https://p-z-r.shop/ArkHelperCS/ArkHelperUpdater.exe)
 
 2. Clone the repo
 
